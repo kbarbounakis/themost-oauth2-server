@@ -1,0 +1,76 @@
+{
+    "id": 2287654,
+    "@id": "http://schema.org/Audience",
+    "name": "Audience",
+    "title": "Audience",
+    "description": "Intended audience for an item, i.e. the group for whom the item was created.",
+    "hidden": false,
+    "sealed": false,
+    "inherits": "Intangible",
+    "fields": [
+        {
+            "name": "id",
+            "title": "ID",
+            "description": "The identifier of the item.",
+            "type": "Integer",
+            "nullable": false,
+            "primary": true
+        },
+        {
+            "@id": "http://schema.org/name",
+            "name": "name",
+            "nullable": false
+        },
+        {
+            "@id": "http://schema.org/name",
+            "name": "alternateName",
+            "nullable": false
+        },
+        {
+            "@id": "http://schema.org/additionalType",
+            "name": "additionalType",
+            "value":"javascript:return this.model.name;"
+        },
+        {
+            "@id": "http://schema.org/audienceType",
+            "name": "audienceType",
+            "title": "Audience Type",
+            "description": "The target group associated with a given audience (e.g. veterans, car owners, musicians, etc.).",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/geographicArea",
+            "name": "geographicArea",
+            "title": "Geographic Area",
+            "description": "The geographic area associated with the audience.",
+            "type": "AdministrativeArea"
+        }
+    ],
+    "constraints": [
+        {
+            "type": "unique",
+            "fields": [
+                "alternateName"
+            ]
+        }
+    ],
+    "seed": [
+
+    ],
+    "privileges": [
+        {
+            "mask": 15,
+            "type": "global",
+            "account": "Administrators"
+        },
+        {
+            "mask": 1,
+            "type": "global",
+            "account": "*"
+        },
+        {
+            "mask": 15,
+            "type": "global"
+        }
+    ]
+}

@@ -1,0 +1,76 @@
+{
+    "id": 5983732,
+    "@id": "http://schema.org/ContactPoint",
+    "name": "ContactPoint",
+    "title": "Contact Point",
+    "description": "A contact point&#x2014;for example, a Customer Complaints department.",
+    "hidden": false,
+    "sealed": false,
+    "inherits": "StructuredValue",
+    "version": "1.1",
+    "fields": [
+        {
+            "name": "id",
+            "title": "ID",
+            "description": "The identifier of the item.",
+            "type": "Integer",
+            "nullable": false,
+            "primary": true
+        },
+        {
+            "@id": "http://schema.org/serviceArea",
+            "name": "serviceArea",
+            "title": "Service Area",
+            "description": "The geographic area where the service is provided.",
+            "type": "AdministrativeArea"
+        },
+        {
+            "@id": "http://schema.org/faxNumber",
+            "name": "faxNumber",
+            "title": "Fax Number",
+            "description": "The fax number.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/telephone",
+            "name": "telephone",
+            "title": "Telephone",
+            "description": "The telephone number.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/email",
+            "name": "email",
+            "title": "Email",
+            "description": "Email address.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/contactType",
+            "name": "contactType",
+            "title": "Contact Type",
+            "description": "A person or organization can have different contact points, for different purposes. For example, a sales contact point, a PR contact point and so on. This property is used to specify the kind of contact point.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/productSupported",
+            "name": "productSupported",
+            "title": "Product Supported",
+            "description": "The product or service this support contact point is related to (such as product support for a particular product line). This can be a specific product or product line (e.g. \"iPhone\") or a general category of products or services (e.g. \"smartphones\").",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/areaServed",
+            "name": "areaServed",
+            "title": "Area Served",
+            "description": "The geographic area where a service or offered item is provided.",
+            "type": "GeoShape"
+        }
+    ],
+    "privileges": [
+        {
+            "mask": 15,
+            "type": "global"
+        }
+    ]
+}

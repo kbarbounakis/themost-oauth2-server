@@ -1,0 +1,55 @@
+{
+    "name": "AuthScope",
+    "id": 635016,
+    "title": "OAuth2 Server Scopes",
+    "hidden": true,
+    "sealed": false,
+    "abstract": false,
+    "version": "1.2",
+    "caching": "conditional",
+    "implements": "Enumeration",
+    "fields": [
+        {
+            "@id": "http://schema.org/name",
+            "name": "name",
+            "title": "Name",
+            "description": "The name of the item.",
+            "nullable": false,
+            "type": "Text",
+            "indexed": true,
+            "validation": {
+                "pattern": "^[a-zA-Z0-9.\\-+_:]+$",
+                "patternMessage": "Scope name may contain only numeric or alphanumeric characters. It also may contain one or more of the following characters: ._+-:"
+            }
+        }
+    ],
+    "constraints": [
+        {
+            "description": "Scope name must be unique",
+            "type": "unique",
+            "fields": ["name"]
+        }
+    ],
+    "privileges": [
+        {
+            "mask": 1,
+            "type": "global",
+            "account": "*"
+        },
+        {
+            "mask": 15,
+            "type": "global",
+            "account": "Administrators"
+        },
+        {
+            "mask": 15,
+            "type": "global"
+        }
+    ],
+    "seed": [
+        {
+            "name":"profile",
+            "description":"Manage user profile and preferences"
+        }
+    ]
+}

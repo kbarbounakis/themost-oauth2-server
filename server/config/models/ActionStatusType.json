@@ -1,0 +1,92 @@
+{
+    "id": 4384674,
+    "@id": "http://schema.org/ActionStatusType",
+    "name": "ActionStatusType",
+    "title": "Action Status Type",
+    "description": "The status of an Action.",
+    "hidden": false,
+    "sealed": false,
+    "implements": "Enumeration",
+    "fields": [
+        {
+            "name": "id",
+            "title": "ID",
+            "description": "The identifier of the item.",
+            "type": "Integer",
+            "nullable": false,
+            "primary": true
+        },
+        {
+            "@id": "http://schema.org/additionalType",
+            "name": "additionalType",
+            "value":"javascript:return this.model.name;"
+        },
+        {
+            "@id": "http://schema.org/alternateName",
+            "name": "alternateName",
+            "nullable": false
+        }
+    ],
+    "constraints": [
+        {
+            "type": "unique",
+            "fields": [
+                "alternateName"
+            ]
+        }
+    ],
+    "seed": [
+        {
+            "name": "Potential",
+            "alternateName": "PotentialActionStatus",
+            "description": "A description of an action that is supported.",
+            "url": "http://schema.org/PotentialActionStatus"
+        },
+        {
+            "name": "Active",
+            "alternateName": "ActiveActionStatus",
+            "description": "An in-progress action (e.g, while watching the movie, or driving to a location).",
+            "url": "http://schema.org/ActiveActionStatus"
+        },
+        {
+            "name": "Paused",
+            "alternateName": "PausedActionStatus",
+            "description": "An action that has been paused.",
+            "url": "https://themost.io/schemas/PausedActionStatus"
+        },
+        {
+            "name": "Failed",
+            "alternateName": "FailedActionStatus",
+            "description": "An action that failed to complete.",
+            "url": "http://schema.org/FailedActionStatus"
+        },
+        {
+            "name": "Completed",
+            "alternateName": "CompletedActionStatus",
+            "description": "An action that has already taken place.",
+            "url": "http://schema.org/CompletedActionStatus"
+        },
+        {
+            "name": "Cancelled",
+            "alternateName": "CancelledActionStatus",
+            "description": "An action that has been cancelled.",
+            "url": "https://themost.io/schemas/CancelledActionStatus"
+        }
+    ],
+    "privileges": [
+      {
+        "mask": 15,
+        "type": "global",
+        "account": "Administrators"
+      },
+      {
+        "mask": 1,
+        "type": "global",
+        "account": "*"
+      },
+        {
+            "mask": 15,
+            "type": "global"
+        }
+    ]
+}

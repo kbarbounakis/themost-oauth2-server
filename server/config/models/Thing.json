@@ -1,0 +1,119 @@
+{
+    "@id": "http://schema.org/Thing",
+    "name": "Thing",
+    "id": 593,
+    "title": "Things",
+    "description": "The most generic type of item.",
+    "hidden": false,
+    "sealed": false,
+    "abstract": false,
+    "version": "1.0",
+    "fields": [
+        {
+            "@id": "https://themost.io/schemas/id",
+            "name": "id",
+            "title": "ID",
+            "description": "The identifier of the item.",
+            "type": "Counter",
+            "nullable": false,
+            "primary": true
+        },
+        {
+            "@id": "http://schema.org/sameAs",
+            "name": "sameAs",
+            "title": "Same As",
+            "description": "URL of a reference Web page that unambiguously indicates the item's identity. E.g. the URL of the item's Wikipedia page, Freebase page, or official website.",
+            "type": "URL"
+        },
+        {
+            "@id": "http://schema.org/url",
+            "name": "url",
+            "title": "Url",
+            "description": "URL of the item.",
+            "type": "URL"
+        },
+        {
+            "@id": "http://schema.org/alternateName",
+            "name": "alternateName",
+            "title": "Alternate Name",
+            "description": "An alias for the item.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/image",
+            "name": "image",
+            "title": "Image",
+            "description": "An image of the item. This can be a <a class=\"localLink\" href=\"/URL\">URL</a> or a fully described <a class=\"localLink\" href=\"/ImageObject\">ImageObject</a>.",
+            "type": "URL"
+        },
+        {
+            "@id": "http://schema.org/additionalType",
+            "name": "additionalType",
+            "title": "Additional Type",
+            "description": "An additional type for the item, typically used for adding more specific types from external vocabularies in microdata syntax. This is a relationship between something and a class that the thing is in. In RDFa syntax, it is better to use the native RDFa syntax - the 'typeof' attribute - for multiple types. Schema.org tools may have only weaker understanding of extra types, in particular those defined externally.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/name",
+            "name": "name",
+            "title": "Name",
+            "description": "The name of the item.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/description",
+            "name": "description",
+            "title": "Description",
+            "description": "A description of the item.",
+            "type": "Text"
+        },
+        {
+            "@id": "https://themost.io/schemas/dateCreated",
+            "name": "dateCreated",
+            "title": "Date Created",
+            "description": "The date on which this item was created.",
+            "type": "DateTime",
+            "value": "javascript:return this.now();",
+            "readonly": true
+        },
+        {
+            "@id": "https://themost.io/schemas/dateModified",
+            "name": "dateModified",
+            "title": "Date Modified",
+            "description": "The date on which this item was most recently modified.",
+            "type": "DateTime",
+            "readonly": true,
+            "value": "javascript:return this.now();",
+            "calculation": "javascript:return this.now();"
+        },
+        {
+            "@id": "https://themost.io/schemas/createdBy",
+            "name": "createdBy",
+            "title": "Created By",
+            "description": "Created by user.",
+            "type": "Integer",
+            "value": "javascript:return this.user();",
+            "readonly": true
+        },
+        {
+            "@id": "https://themost.io/schemas/modifiedBy",
+            "name": "modifiedBy",
+            "title": "Modified By",
+            "description": "Modified by user.",
+            "type": "Integer",
+            "calculation": "javascript:return this.user();",
+            "readonly": true
+        }
+    ],
+    "privileges": [
+        {
+            "mask": 1,
+            "type": "global",
+            "account": "Administrators"
+        },
+        {
+            "mask": 15,
+            "type": "global"
+        }
+    ]
+}

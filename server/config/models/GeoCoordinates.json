@@ -1,0 +1,65 @@
+{
+    "id": 8518916,
+    "@id": "http://schema.org/GeoCoordinates",
+    "name": "GeoCoordinates",
+    "title": "Geo Coordinates",
+    "description": "The geographic coordinates of a place or event.",
+    "hidden": false,
+    "sealed": false,
+    "inherits": "StructuredValue",
+    "version": "1.1",
+    "fields": [
+        {
+            "name": "id",
+            "title": "ID",
+            "description": "The identifier of the item.",
+            "type": "Integer",
+            "nullable": false,
+            "primary": true
+        },
+        {
+            "@id": "http://schema.org/additionalType",
+            "name": "additionalType",
+            "title": "Additional Type",
+            "description": "An additional type for the item, typically used for adding more specific types from external vocabularies in microdata syntax. This is a relationship between something and a class that the thing is in. In RDFa syntax, it is better to use the native RDFa syntax - the 'typeof' attribute - for multiple types. Schema.org tools may have only weaker understanding of extra types, in particular those defined externally.",
+            "type": "Text",
+            "readonly": true,
+            "value":"javascript:return this.model.name;"
+        },
+        {
+            "@id": "http://schema.org/latitude",
+            "name": "latitude",
+            "title": "Latitude",
+            "description": "The latitude of a location. For example <code>37.42242</code> (<a href=\"https://en.wikipedia.org/wiki/World_Geodetic_System\">WGS 84</a>).",
+            "type": "Number",
+            "validation": {
+                "minValue": -90,
+                "maxValue": 90
+            }
+        },
+        {
+            "@id": "http://schema.org/longitude",
+            "name": "longitude",
+            "title": "Longitude",
+            "description": "The longitude of a location. For example <code>-122.08585</code> (<a href=\"https://en.wikipedia.org/wiki/World_Geodetic_System\">WGS 84</a>).",
+            "type": "Number",
+            "validation": {
+                "minValue": -90,
+                "maxValue": 90
+            }
+        },
+        {
+            "@id": "http://schema.org/elevation",
+            "name": "elevation",
+            "title": "Elevation",
+            "description": "The elevation of a location.",
+            "type": "Number"
+        }
+    ],
+    "privileges": [
+        {
+            "mask": 15,
+            "type": "global"
+        }
+    ]
+}

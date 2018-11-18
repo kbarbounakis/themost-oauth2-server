@@ -1,0 +1,105 @@
+{
+    "id": 6226741,
+    "@id": "http://schema.org/Country",
+    "name": "Country",
+    "title": "Country",
+    "description": "A country.",
+    "hidden": false,
+    "sealed": false,
+    "inherits": "AdministrativeArea",
+    "version": "1.2",
+    "fields": [
+        {
+            "name": "id",
+            "title": "ID",
+            "description": "The identifier of the item.",
+            "type": "Integer",
+            "nullable": false,
+            "primary": true
+        },
+        {
+            "@id": "http://schema.org/additionalType",
+            "name": "additionalType",
+            "title": "Additional Type",
+            "description": "An additional type for the item, typically used for adding more specific types from external vocabularies in microdata syntax. This is a relationship between something and a class that the thing is in. In RDFa syntax, it is better to use the native RDFa syntax - the 'typeof' attribute - for multiple types. Schema.org tools may have only weaker understanding of extra types, in particular those defined externally.",
+            "type": "Text",
+            "readonly": true,
+            "value":"javascript:return this.model.name;"
+        },
+        {
+            "@id": "http://schema.org/name",
+            "name": "name",
+            "title": "Name",
+            "description": "The name of the item.",
+            "type": "Text",
+            "nullable": false
+        },
+        {
+            "@id": "https://themost.io/schemas/cca2",
+            "name": "cca2",
+            "title": "Code ISO 3166-1 alpha-2",
+            "description": "The ISO 3166-1 alpha-2 code of the country.",
+            "type": "Text"
+        },
+        {
+            "@id": "https://themost.io/schemas/cioc",
+            "name": "cioc",
+            "title": "International Olympic Committee Code",
+            "description": "The International Olympic Committee code of the country.",
+            "type": "Text"
+        },
+        {
+            "@id": "https://themost.io/schemas/cca3",
+            "name": "cca3",
+            "title": "Code ISO 3166-1 alpha-3",
+            "description": "The ISO 3166-1 alpha-3 code of the country.",
+            "type": "Text"
+        },
+        {
+            "@id": "https://themost.io/schemas/currency",
+            "name": "currency",
+            "title": "Currency",
+            "description": "The currency of the country.",
+            "type": "Text"
+        },
+        {
+            "@id": "https://themost.io/schemas/tld",
+            "name": "tld",
+            "title": "Top-level Domain",
+            "description": "The top-level domain code of the country.",
+            "type": "Text"
+        },
+        {
+            "@id": "https://themost.io/schemas/languages",
+            "name": "languages",
+            "title": "Languages",
+            "description": "A collection of languages assicated with the country.",
+            "type": "Language",
+            "many": true
+        }
+    ],
+    "constraints": [
+        {
+            "type": "unique",
+            "fields": [
+                "cca2"
+            ]
+        }
+    ],
+    "privileges": [
+        {
+            "mask": 1,
+            "type": "global",
+            "account": "*"
+        },
+        {
+            "mask": 15,
+            "type": "global"
+        },
+        {
+            "mask": 15,
+            "type": "global",
+            "account":"Administrators"
+        }
+    ]
+}

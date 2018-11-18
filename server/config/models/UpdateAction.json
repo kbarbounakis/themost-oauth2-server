@@ -1,0 +1,32 @@
+{
+    "id": 5486683,
+    "@id": "http://schema.org/UpdateAction",
+    "name": "UpdateAction",
+    "title": "Update Action",
+    "description": "The act of managing by changing/editing the state of the object.",
+    "hidden": true,
+    "sealed": false,
+    "inherits": "Action",
+    "version":"1.5",
+    "fields": [
+        {
+            "name": "id",
+            "title": "ID",
+            "description": "The identifier of the item.",
+            "type": "Integer",
+            "nullable": false,
+            "primary": true
+        }
+    ],
+    "privileges": [
+        {
+            "mask": 15,
+            "type": "global",
+            "account":"Administrators"
+        },
+        {
+            "mask": 15,
+            "type": "global"
+        }
+    ]
+}

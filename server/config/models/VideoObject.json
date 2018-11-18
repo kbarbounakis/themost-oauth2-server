@@ -1,0 +1,86 @@
+{
+    "id": 5304520,
+    "@id": "http://schema.org/VideoObject",
+    "name": "VideoObject",
+    "title": "Video Object",
+    "description": "A video file.",
+    "hidden": false,
+    "sealed": false,
+    "inherits": "MediaObject",
+    "version": "1.1",
+    "fields": [
+        {
+            "name": "id",
+            "title": "ID",
+            "description": "The identifier of the item.",
+            "type": "Integer",
+            "nullable": false,
+            "primary": true
+        },
+        {
+            "@id": "http://schema.org/videoFrameSize",
+            "name": "videoFrameSize",
+            "title": "Video Frame Size",
+            "description": "The frame size of the video.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/musicBy",
+            "name": "musicBy",
+            "title": "Music By",
+            "description": "The composer of the soundtrack.",
+            "type": "Person"
+        },
+        {
+            "@id": "http://schema.org/directors",
+            "name": "directors",
+            "title": "Directors",
+            "description": "A director of e.g. tv, radio, movie, video games etc. content. Directors can be associated with individual items or with a series, episode, clip.",
+            "type": "Person",
+            "many": true
+        },
+        {
+            "@id": "http://schema.org/transcript",
+            "name": "transcript",
+            "title": "Transcript",
+            "description": "If this MediaObject is an AudioObject or VideoObject, the transcript of that object.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/videoQuality",
+            "name": "videoQuality",
+            "title": "Video Quality",
+            "description": "The quality of the video.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/thumbnail",
+            "name": "thumbnail",
+            "title": "Thumbnail",
+            "description": "Thumbnail image for an image or video.",
+            "type": "ImageObject",
+            "nested": true
+        },
+        {
+            "@id": "http://schema.org/caption",
+            "name": "caption",
+            "title": "Caption",
+            "description": "The caption for this object.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/actors",
+            "name": "actors",
+            "title": "Actors",
+            "description": "An actor, e.g. in tv, radio, movie, video games etc. Actors can be associated with individual items or with a series, episode, clip.",
+            "type": "Person",
+            "many": true
+        }
+    ],
+    "privileges": [
+        {
+            "mask": 15,
+            "type": "global"
+        }
+    ]
+}
