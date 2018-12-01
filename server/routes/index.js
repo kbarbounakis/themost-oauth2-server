@@ -23,12 +23,26 @@ let router = express.Router();
 
 /* GET home page. */
 router.get('/',passport.authenticate('local', { failureRedirect: '/login' }), (req, res, next) => {
-  res.redirect('login');
+  res.render('index');
 });
 
 /* GET login page. */
 router.get('/login', (req, res, next) => {
   res.render('login', { title: 'Express' });
+});
+
+/* GET login page. */
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) { 
+      return next(err); 
+    }
+    if (!user) { 
+      return res.render('login', { username: req.body.username }); 
+    }
+    return res.redirect('index');
+    
+  })(req, res, next);
 });
 
 module.exports = router;
