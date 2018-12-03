@@ -1,0 +1,51 @@
+<% layout('../shared/master') -%>
+<div class="row justify-content-center" ng-controller="ResetPasswordController as ctrl">
+    <div class="col-md-8">
+        <div class="card-group">
+            <div class="card p-4">
+                <div class="card-body" <%- model.username ? "ng-init=\"username='" + model.username  + "';\"" : "" %>>
+                    <form class="form" name="form" method="post" action="" novalidate="novalidate">
+                        <h1 >Reset your password</h1>
+                        <input type="hidden" server-anti-forgery="">
+                        <p class="text-muted" >Enter your new password below:</p>
+                        <div class="input-group mb-3">
+                            <span class="input-group-addon"><i class="icon-lock"></i></span>
+                            <input spellcheck="false" ng-model="newPassword"
+                                   required="required" ng-pattern="ctrl.passwordPattern"
+                                   type="password" id="newPassword" name="newPassword"
+                                   class="form-control" 
+                                   placeholder="New password">
+                        </div>
+                        <div class="input-group mb-4">
+                            <span class="input-group-addon"><i class="icon-lock-open"></i></span>
+                            <input spellcheck="false"  ng-model="confirmPassword"
+                                   compare-to="newPassword" ng-pattern="ctrl.passwordPattern"
+                                   required="required" type="password"
+                                   id="confirmPassword" name="confirmPassword" class="form-control"
+                                   placeholder="Re-type new password">
+                        </div>
+                        <div class="justify-content-center">
+                            <p class="text-center pt-2">
+                                <span class="text-danger" ng-show="form.confirmPassword.$touched && form.confirmPassword.$dirty &&  form.confirmPassword.$invalid && form.confirmPassword.$error.compareTo" >Password does not match confirm password.</span>
+                                <span class="text-danger" ng-show="form.newPassword.$touched &&  form.newPassword.$dirty && form.newPassword.$error.pattern" >The new password does not meet the password policy requirements.</span>
+                            </p>
+                        </div>
+                        <% if (model.code === 'EFAIL') { %>
+                        <div class="col-sm-12 justify-content-center" ng-show="form.confirmPassword.$pristine && form.newPassword.$pristine">
+                            <p  class="text-danger"><%=model.message%></p>
+                        </div>
+                        <%}%>
+                        <div class="justify-content-center">
+                            <p class="text-center pt-2"><span><span >Note</span>: </span><span>PasswordNote</span></p>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary px-4">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

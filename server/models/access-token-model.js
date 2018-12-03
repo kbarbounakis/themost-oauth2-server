@@ -19,7 +19,7 @@ import {EdmMapping} from '@themost/data/odata';
  * @augments {DataObject}
  */
 @EdmMapping.entityType('AccessToken')
-class AccessToken extends DataObject {
+export default class AccessToken extends DataObject {
     constructor() {
         super();
         this.selector('expired', (callback)=> {
@@ -28,5 +28,3 @@ class AccessToken extends DataObject {
         });
     }
 }
-
-module.exports = AccessToken;

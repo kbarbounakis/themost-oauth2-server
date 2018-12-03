@@ -1,0 +1,24 @@
+<% layout('../shared/master') -%>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card-group">
+            <div class="card p-4">
+                <div class="card-body">
+                    <h2 class="card-title">Reset password failed</h2>
+                    <div class="pt-1 pb-1">
+                        <p class="text-center text-danger">
+                            <span>The data is invalid. The verification code is invalid or has been expired.</span>
+                            <span>Please try again following the instructions which are provided in the reset password message.</span>
+                        </p>
+                        <p class="text-center">
+                            <span>If the problem persists, request a new reset password verification code by clicking the link below.</span>
+                        </p>
+                    </div>
+                    <div>
+                        <a href="<%=html.context.application.resolveUrl('~/password/reminder')%>" class="btn btn-primary mt-3 text-uppercase">Forgot your password?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,7 +11,7 @@ import {DataObject} from '@themost/data/data-object';
 import {EdmMapping} from '@themost/data/odata';
 import moment from 'moment';
 @EdmMapping.entityType('Action')
-class Action extends DataObject {
+export default class Action extends DataObject {
     constructor() {
         super();
         this.selector('overdue', (callback)=> {
@@ -41,5 +41,3 @@ class Action extends DataObject {
     }
 
 }
-
-module.exports = Action;

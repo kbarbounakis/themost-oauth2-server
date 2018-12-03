@@ -19,7 +19,7 @@ import url from 'url';
  * @property {string} redirect_uri
  */
 @EdmMapping.entityType('AuthClient')
-class AuthClient extends DataObject {
+export default class AuthClient extends DataObject {
     constructor() {
         super();
     }
@@ -48,5 +48,3 @@ class AuthClient extends DataObject {
     }
 
 }
-
-module.exports = AuthClient;

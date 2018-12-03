@@ -1,96 +1,27 @@
 #!/usr/bin/env node
-
 /**
- * Module dependencies.
+ * @license
+ * MOST Web Framework 2.0 Codename Blueshift
+ * Copyright (c) 2017, THEMOST LP All rights reserved
+ *
+ * Use of this source code is governed by an BSD-3-Clause license that can be
+ * found in the LICENSE file at https://themost.io/license
  */
 // check if process was started with --require @babel/register and load development module
-var appModule = process.execArgv.indexOf('@babel/register') ? '../server/app' : '../dist/server/app';
-var app = require(appModule);
-var debug = require('debug')('app:server');
-var http = require('http');
-
+let applicationModule = process.execArgv.indexOf('@babel/register') ? '../server/server' : '../dist/server/server';
 /**
- * Get port from environment and store in Express.
+ * @type {HttpApplication}
  */
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+let app = require(applicationModule);
 
-/**
- * Get ip from environment and store in Express.
- */
-var ip = process.env.IP || '127.0.0.1';
-app.set('ip', ip);
+// get port
+let port = /^\d+$/.test(process.env.PORT) ? parseInt(process.env.PORT, 10) : 3000;
 
-/**
- * Create HTTP server.
- */
+// get listen address
+let ip = process.env.IP || '127.0.0.1';
 
-var server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port, ip);
-server.on('error', onError);
-server.on('listening', onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
-function normalizePort(val) {
-  var port = parseInt(val, 10);
-
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
-  return false;
-}
-
-/**
- * Event listener for HTTP server "error" event.
- */
-
-function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
-
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
-
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
-}
-
-/**
- * Event listener for HTTP server "listening" event.
- */
-
-function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-}
+// Listen on provided port and address
+app.start({
+    port: port,
+    bind: ip
+});

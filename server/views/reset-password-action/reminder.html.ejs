@@ -1,0 +1,34 @@
+<% layout('../shared/master') -%>
+<div class="row justify-content-center" ng-controller="ResetPasswordController as login">
+    <div class="col-md-8">
+        <div class="card-group">
+            <div class="card p-4">
+                <div class="card-body">
+                    <form class="form" name="form" method="post" action="" novalidate="novalidate">
+                        <h1 >Forgot your password?</h1>
+                        <input type="hidden" server-anti-forgery="">
+                        <p class="text-muted" >Type the email address you used when you registered.</p>
+                        <div class="input-group mb-3">
+                            <span class="input-group-addon"><i class="icon-user"></i></span>
+                            <input autocomplete="no" type="email" ng-model="email" required="required" class="form-control" placeholder="Email" name="email" >
+                        </div>
+                        <% if (model.code === 'EFAIL') { %>
+                        <div class="col-sm-12 justify-content-center">
+                            <p class="pb-2 text-danger text-center" ><%=model.message%></p>
+                        </div>
+                        <% } else { %>
+                        <div class="col-sm-12 justify-content-center">
+                            <p class="pb-2 text-center" >A verification code will be sent to you. Follow the instructions to complete the operation.</p>
+                        </div>
+                        <% } %>
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary text-uppercase" ng-disabled="form.$invalid">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

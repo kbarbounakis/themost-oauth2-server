@@ -1,0 +1,13 @@
+[
+    { "url":"/", "controller":"root", "action":"index" },
+    { "url":"/error", "controller":"root", "action":"error" },
+    { "url":"/welcome", "controller":"root", "action":"welcome" },
+    { "url":"/login", "controller":"root", "action":"login" },
+    { "url":"/user", "controller":"root", "action":"user" },
+    { "url":"/logout", "controller":"root", "action":"logout" },
+    { "url":"/access_token", "controller":"auth", "action":"access_token" },
+    { "url":"/tokeninfo", "controller":"auth", "action":"tokeninfo" },
+    { "url":"/authorize", "controller":"auth", "action":"authorize" },
+    { "url":"/me", "controller":"auth", "action":"me" },
+    { "url":"/password/:action", "controller":"reset-password-action" }
+]
