@@ -27,6 +27,38 @@
             "value":"javascript:return this.model.name;"
         },
         {
+            "@id": "http://schema.org/openingHoursSpecification",
+            "name": "openingHoursSpecification",
+            "title": "Opening Hours Specification",
+            "description": "The opening hours of a certain place.",
+            "type": "OpeningHoursSpecification",
+            "many":true
+        },
+        {
+            "@id": "http://schema.org/aggregateRating",
+            "name": "aggregateRating",
+            "title": "Aggregate Rating",
+            "description": "The overall rating, based on a collection of reviews or ratings, of the item.",
+            "type": "AggregateRating",
+            "nested": true
+        },
+        {
+            "@id": "http://schema.org/reviews",
+            "name": "reviews",
+            "title": "Reviews",
+            "description": "Review of the item.",
+            "many": true,
+            "type": "Review"
+        },
+        {
+            "@id": "http://schema.org/photos",
+            "name": "photos",
+            "title": "Photos",
+            "description": "Photographs of this place.",
+            "type": "Photograph",
+            "many":true
+        },
+        {
             "@id": "http://schema.org/map",
             "name": "map",
             "title": "Map",
@@ -48,6 +80,22 @@
             "type": "PostalAddress",
             "expandable": true,
             "nested": true
+        },
+        {
+            "@id": "http://schema.org/events",
+            "name": "events",
+            "title": "Events",
+            "description": "Upcoming or past events associated with this place or organization.",
+            "many": true,
+            "type": "Event"
+        },
+        {
+            "@id": "http://schema.org/specialOpeningHoursSpecification",
+            "name": "specialOpeningHoursSpecification",
+            "title": "Special Opening Hours Specification",
+            "description": "The special opening hours of a certain place.</p>\n<p>Use this to explicitly override general opening hours brought in scope by <a class=\"localLink\" href=\"/openingHoursSpecification\">openingHoursSpecification</a> or <a class=\"localLink\" href=\"/openingHours\">openingHours</a>.",
+            "type": "OpeningHoursSpecification",
+            "many":true
         },
         {
             "@id": "http://schema.org/logo",

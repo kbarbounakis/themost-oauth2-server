@@ -9,7 +9,6 @@
     "inherits": "Thing",
     "fields": [
         {
-             "@id": "https://themost.io/schemas/id",
             "name": "id",
             "title": "Id",
             "type": "Integer",

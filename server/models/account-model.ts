@@ -8,32 +8,30 @@
  * found in the LICENSE file at https://themost.io/license
  */
 import {EdmMapping} from '@themost/data/odata';
-import {DataObject} from '@themost/data/data-object';
-
+import Thing from './thing-model';
 /**
  * @class
  
  * @property {number} id
- * @property {string} sameAs
- * @property {string} url
- * @property {string} alternateName
- * @property {string} image
- * @property {string} additionalType
- * @property {string} name
- * @property {string} description
- * @property {Date} dateCreated
- * @property {Date} dateModified
- * @property {number} createdBy
- * @property {number} modifiedBy
+ * @property {number} accountType
  * @augments {DataObject}
  */
-@EdmMapping.entityType('Thing')
-class Thing extends DataObject {
+@EdmMapping.entityType('Account')
+class Account extends Thing {
     /**
      * @constructor
      */
     constructor() {
         super();
     }
+    /**
+      * @description The identifier of the item.
+      */
+     public id: number = 0; 
+     
+     /**
+      * @description Contains a set of flags that define the type and scope of an account object.
+      */
+     public accountType?: number; 
 }
-module.exports = Thing;
+export default Account;

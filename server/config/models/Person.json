@@ -32,6 +32,13 @@
             "type": "Person"
         },
         {
+            "@id": "http://schema.org/height",
+            "name": "height",
+            "title": "Height",
+            "description": "The height of the item.",
+            "type": "QuantitativeValue"
+        },
+        {
             "@id": "http://schema.org/workLocation",
             "name": "workLocation",
             "title": "Work Location",
@@ -65,7 +72,7 @@
             "name": "gender",
             "title": "Gender",
             "description": "Gender of the person. While http://schema.org/Male and http://schema.org/Female may be used, text strings are also acceptable for people who do not identify as a binary gender.",
-            "type": "Text"
+            "type": "GenderType"
         },
         {
             "@id": "http://schema.org/parents",
@@ -105,6 +112,22 @@
             "type": "Text"
         },
         {
+            "@id": "http://schema.org/awards",
+            "name": "awards",
+            "title": "Awards",
+            "description": "Awards won by or for this item.",
+            "type": "Award",
+            "many":true,
+            "mapping": {
+                "cascade": "delete",
+                "assocationType": "association",
+                "parentModel":"Person",
+                "parentField": "id",
+                "childModel": "Award",
+                "childField": "object"
+            }
+        },
+        {
             "@id": "http://schema.org/familyName",
             "name": "familyName",
             "title": "Family Name",
@@ -134,6 +157,13 @@
             "type": "Person"
         },
         {
+            "@id": "http://schema.org/weight",
+            "name": "weight",
+            "title": "Weight",
+            "description": "The weight of the product or person.",
+            "type": "QuantitativeValue"
+        },
+        {
             "@id": "http://schema.org/affiliation",
             "name": "affiliation",
             "title": "Affiliation",
@@ -146,6 +176,20 @@
             "title": "Honorific Suffix",
             "description": "An honorific suffix preceding a Person's name such as M.D. /PhD/MSCSW.",
             "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/nationality",
+            "name": "nationality",
+            "title": "Nationality",
+            "description": "Nationality of the person.",
+            "type": "Country",
+            "mapping": {
+                "associationType": "association",
+                "parentModel": "Country",
+                "parentField": "cca2",
+                "childModel": "Person",
+                "childField": "nationality"
+            }
         },
         {
             "@id": "http://schema.org/relatedTo",

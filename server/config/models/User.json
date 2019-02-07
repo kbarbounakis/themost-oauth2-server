@@ -29,7 +29,6 @@
             "value": "javascript:return 0;"
         },
         {
-            "@id": "https://themost.io/schemas/lockoutTime",
             "name": "lockoutTime",
             "title": "Lockout Time",
             "description": "The date and time that this account was locked out.",
@@ -128,15 +127,6 @@
             "groups": [
                 {
                     "name": "Guests"
-                }
-            ]
-        },
-        {
-            "name": "admin@example.com",
-            "description": "Site Administrator",
-            "groups": [
-                {
-                    "name": "Administrators"
                 }
             ]
         }

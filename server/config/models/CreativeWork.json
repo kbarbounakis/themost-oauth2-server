@@ -25,6 +25,13 @@
             "type": "Thing"
         },
         {
+            "@id": "http://schema.org/educationalAlignment",
+            "name": "educationalAlignment",
+            "title": "Educational Alignment",
+            "description": "An alignment to an established educational framework.",
+            "type": "AlignmentObject"
+        },
+        {
             "@id": "http://schema.org/associatedMedia",
             "name": "associatedMedia",
             "title": "Associated Media",
@@ -123,6 +130,13 @@
             "type": "VideoObject"
         },
         {
+            "@id": "http://schema.org/publication",
+            "name": "publication",
+            "title": "Publication",
+            "description": "A publication event associated with the item.",
+            "type": "PublicationEvent"
+        },
+        {
             "@id": "http://schema.org/text",
             "name": "text",
             "title": "Text",
@@ -151,6 +165,13 @@
             "type": "Text"
         },
         {
+            "@id": "http://schema.org/releasedEvent",
+            "name": "releasedEvent",
+            "title": "Released Event",
+            "description": "The place and time the release was issued, expressed as a PublicationEvent.",
+            "type": "PublicationEvent"
+        },
+        {
             "@id": "http://schema.org/contentLocation",
             "name": "contentLocation",
             "title": "Content Location",
@@ -170,6 +191,13 @@
             "title": "Accessibility Feature",
             "description": "Content features of the resource, such as accessible media, alternatives and supported enhancements for accessibility (<a href=\"http://www.w3.org/wiki/WebSchemas/Accessibility\">WebSchemas wiki lists possible values</a>).",
             "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/aggregateRating",
+            "name": "aggregateRating",
+            "title": "Aggregate Rating",
+            "description": "The overall rating, based on a collection of reviews or ratings, of the item.",
+            "type": "AggregateRating"
         },
         {
             "@id": "http://schema.org/locationCreated",
@@ -200,6 +228,14 @@
             "type": "Place"
         },
         {
+            "@id": "http://schema.org/reviews",
+            "name": "reviews",
+            "title": "Reviews",
+            "description": "Review of the item.",
+            "type": "Review",
+            "many": true
+        },
+        {
             "@id": "http://schema.org/offers",
             "name": "offers",
             "title": "Offers",
@@ -222,6 +258,13 @@
             "type": "URL"
         },
         {
+            "@id": "http://schema.org/award",
+            "name": "award",
+            "title": "Award",
+            "description": "An award won by or for this item.",
+            "type": "Text"
+        },
+        {
             "@id": "http://schema.org/copyrightHolder",
             "name": "copyrightHolder",
             "title": "Copyright Holder",
@@ -241,6 +284,20 @@
             "title": "Copyright Year",
             "description": "The year during which the claimed copyright for the CreativeWork was first asserted.",
             "type": "Number"
+        },
+        {
+            "@id": "http://schema.org/awards",
+            "name": "awards",
+            "title": "Awards",
+            "description": "Awards won by or for this item.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/recordedAt",
+            "name": "recordedAt",
+            "title": "Recorded At",
+            "description": "The Event where the CreativeWork was recorded. The CreativeWork may capture all or part of the event.",
+            "type": "Event"
         },
         {
             "@id": "http://schema.org/commentCount",
@@ -268,6 +325,20 @@
             "name": "accessibilityAPI",
             "title": "Accessibility API",
             "description": "Indicates that the resource is compatible with the referenced accessibility API (<a href=\"http://www.w3.org/wiki/WebSchemas/Accessibility\">WebSchemas wiki lists possible values</a>).",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/interactionStatistic",
+            "name": "interactionStatistic",
+            "title": "Interaction Statistic",
+            "description": "The number of interactions for the CreativeWork using the WebSite or SoftwareApplication. The most specific child type of InteractionCounter should be used.",
+            "type": "InteractionCounter"
+        },
+        {
+            "@id": "http://schema.org/contentRating",
+            "name": "contentRating",
+            "title": "Content Rating",
+            "description": "Official rating of a piece of content&#x2014;for example,'MPAA PG-13'.",
             "type": "Text"
         },
         {
@@ -330,7 +401,7 @@
             "@id": "http://schema.org/author",
             "name": "author",
             "title": "Author",
-            "description": "The author of this content. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.",
+            "description": "The author of this content or rating. Please note that author is special in that HTML 5 provides a special mechanism for indicating authorship via the rel tag. That is equivalent to this and may be used interchangeably.",
             "type": "Person"
         },
         {
@@ -389,6 +460,13 @@
             "title": "Comment",
             "description": "Comments, typically from users.",
             "type": "Comment"
+        },
+        {
+            "@id": "http://schema.org/review",
+            "name": "review",
+            "title": "Review",
+            "description": "A review of the item.",
+            "type": "Review"
         },
         {
             "@id": "http://schema.org/license",

@@ -7,11 +7,12 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-import {DataObject} from '@themost/data/data-object';
 import {EdmMapping} from '@themost/data/odata';
-import moment from 'moment';
+import * as moment from 'moment';
+import Thing from './thing-model';
+
 @EdmMapping.entityType('Action')
-class Action extends DataObject {
+class Action extends Thing {
     constructor() {
         super();
         this.selector('overdue', (callback)=> {
@@ -35,6 +36,20 @@ class Action extends DataObject {
             });
         });
     }
+    
+    public actionStatus: any;
+    
+    public target: any;
+    
+    public owner: any;
+    
+    public agent: any;
+    
+    public object: any;
+    
+    public startTime?: Date;
+    
+    public endTime?: Date;
 
     isOverdue() {
         return this.is(':overdue');
@@ -42,4 +57,4 @@ class Action extends DataObject {
 
 }
 
-module.exports = Action;
+export default Action;

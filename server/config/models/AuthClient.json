@@ -5,7 +5,7 @@
     "hidden": true,
     "sealed": false,
     "abstract": false,
-    "version": "1.2",
+    "version": "1.1",
     "fields": [
         {
             "@id": "https://themost.io/schemas/client_id",
@@ -60,12 +60,25 @@
             "many": true,
             "mapping": {
                 "associationAdapter": "AuthClientScopes",
-                "parentModel": "AuthScope",
-                "parentField": "id",
-                "childModel": "AuthClient",
-                "childField": "client_id",
+                "associationObjectField": "client",
+                "associationValueField": "scope",
+                "parentModel": "AuthClient",
+                "parentField": "client_id",
+                "childModel": "AuthScope",
+                "childField": "id",
                 "associationType": "junction",
-                "cascade": "none"
+                "cascade": "delete",
+                "privileges": [
+                    {
+                        "mask": 15,
+                        "type": "global",
+                        "account": "Administrators"
+                    },
+                    {
+                        "mask": 15,
+                        "type": "global"
+                    }
+                ]
             }
         }
     ],
@@ -78,6 +91,48 @@
         {
             "mask": 15,
             "type": "global"
+        }
+    ],
+    "seed": [
+        {
+            "name": "OAuth2 Server Application",
+            "redirect_uri": "http://localhost:3000/auth/callback",
+            "grant_type": "code",
+            "scopes":[
+                {
+                    "name":"profile"
+                }
+            ]
+        },
+        {
+            "name": "Students Application",
+            "redirect_uri": "http://localhost:7001/auth/callback",
+            "grant_type": "code,token",
+            "scopes":[
+                {
+                    "name":"students"
+                }
+            ]
+        },
+        {
+            "name": "Instructors Application",
+            "redirect_uri": "http://localhost:7002/auth/callback",
+            "grant_type": "code,token",
+            "scopes":[
+                {
+                    "name":"teachers"
+                }
+            ]
+        },
+        {
+            "name": "Dashboard Application",
+            "redirect_uri": "http://localhost:7003/auth/callback",
+            "grant_type": "code,token",
+            "scopes":[
+                {
+                    "name": "dashboard"
+                }
+            ]
         }
     ]
 }

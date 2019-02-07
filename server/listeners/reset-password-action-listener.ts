@@ -7,22 +7,25 @@
  * found in the LICENSE file at https://themost.io/license
  */
 import {TraceUtils} from '@themost/common/utils';
-import mailer from '@themost/mailer';
+import {getMailer} from '@themost/mailer';
+import {DataEventArgs} from '@themost/data'
+import Action from '../models/action-model';
 /**
  *
  * @param {DataEventArgs} event
  * @param {Function} callback
  */
-export function afterSave(event, callback) {
+export function afterSave(event: DataEventArgs, callback: (err?: Error) => void) {
 
     if (event.state === 1) {
         const context = event.model.context;
-        return mailer.getMailer(context)
-            .to(event.target.object.name)
+        const target  = event.target as Action;
+        return getMailer(context)
+            .to(target.object.name)
             .subject('Password Reminder (theMOST Authentication Services)')
             .template('reminder').send(event.target, (err) => {
                 if (err) {
-                    TraceUtils.error('An error occured while sending password reminder message for password reset action with ID:' + event.target.id);
+                    TraceUtils.error('An error occured while sending password reminder message for password reset action with ID:' + target.id);
                 }
                 return callback(err);
         });

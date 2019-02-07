@@ -32,6 +32,14 @@
             "type": "Text"
         },
         {
+            "@id": "http://schema.org/hoursAvailable",
+            "name": "hoursAvailable",
+            "title": "Hours Available",
+            "description": "The hours during which this service or contact is available.",
+            "type": "OpeningHoursSpecification",
+            "many": true
+        },
+        {
             "@id": "http://schema.org/telephone",
             "name": "telephone",
             "title": "Telephone",

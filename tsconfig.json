@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "preserveSymlinks": true,
+        "target": "es5",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "strictPropertyInitialization": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "removeComments": false,
+        "noImplicitAny": false,
+        "resolveJsonModule": true,
+        "declaration": true,
+        "strict": true,
+        "stripInternal": true,
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "lib": ["es2017", "dom"]
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

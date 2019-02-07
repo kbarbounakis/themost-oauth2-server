@@ -12,21 +12,36 @@ import {DataObject} from '@themost/data/data-object';
 import {EdmMapping} from '@themost/data/odata';
 /**
  * @class
- * @property {string} client_id
- * @property {string} user_id
- * @property {Date} expires
- * @property {string} access_token
  * @augments {DataObject}
  */
 @EdmMapping.entityType('AccessToken')
 class AccessToken extends DataObject {
+    
     constructor() {
         super();
-        this.selector('expired', (callback)=> {
+        this.selector('expired', (callback) => {
             const expired = (new Date(this.expires)).getTime()<(new Date()).getTime();
             return callback(null, expired);
         });
     }
+    
+   /**
+      * @description Gets or sets a string which represents the client associated with this access token.
+      */
+    public client_id: string; 
+     /**
+      * @description Gets or sets a string which represents a user.
+      */
+    public user_id: number; 
+     /**
+      * Gets or sets a string which represents an access token.
+      */
+    public access_token: string; 
+     /**
+      * @description Gets or sets the expiration date time.
+      */
+    public expires: Date; 
+    
 }
 
-module.exports = AccessToken;
+export default AccessToken;

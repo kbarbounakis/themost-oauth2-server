@@ -57,6 +57,38 @@
             "many": true
         },
         {
+            "@id": "http://schema.org/aggregateRating",
+            "name": "aggregateRating",
+            "title": "Aggregate Rating",
+            "description": "The overall rating, based on a collection of reviews or ratings, of the item.",
+            "type": "AggregateRating",
+            "nested":true
+        },
+        {
+            "@id": "http://schema.org/reviews",
+            "name": "reviews",
+            "title": "Reviews",
+            "description": "Review of the item.",
+            "many": true,
+            "type": "Review"
+        },
+        {
+            "@id": "http://schema.org/awards",
+            "name": "awards",
+            "title": "Awards",
+            "description": "Awards won by or for this item.",
+            "type": "Award",
+            "many":true,
+            "mapping": {
+                "cascade": "delete",
+                "assocationType": "association",
+                "parentModel":"Person",
+                "parentField": "id",
+                "childModel": "Award",
+                "childField": "object"
+            }
+        },
+        {
             "@id": "http://schema.org/foundingDate",
             "name": "foundingDate",
             "title": "Founding Date",
@@ -77,6 +109,14 @@
             "title": "Dissolution Date",
             "description": "The date that this organization was dissolved.",
             "type": "Date"
+        },
+        {
+            "@id": "http://schema.org/events",
+            "name": "events",
+            "title": "Events",
+            "description": "Upcoming or past events associated with this place or organization.",
+            "type": "Event",
+            "many": true
         },
         {
             "@id": "http://schema.org/logo",

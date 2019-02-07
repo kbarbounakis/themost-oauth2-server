@@ -7,7 +7,7 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-import {EdmMapping,EdmType} from '@themost/data/odata';
+import {EdmMapping} from '@themost/data/odata';
 import {TextUtils} from '@themost/common/utils';
 let Account = require('./account-model');
 /**
@@ -30,6 +30,35 @@ class User extends Account {
     constructor() {
         super();
     }
+    /**
+      * @description The identifier of the item.
+      */
+     public id: number = 0; 
+     /**
+      * @description The date and time that this account was locked out.
+      */
+     public lockoutTime?: Date; 
+     /**
+      * @description The number of times the account has successfully logged on.
+      */
+     public logonCount?: number; 
+     /**
+      * @description Indicates whether a user is enabled or not.
+      */
+     public enabled: boolean = false; 
+     
+     /**
+      * @description Indicates whether a user is external authenticated or not.
+      */
+     public external: boolean = false; 
+     /**
+      * @description The last time and date the user logged on.
+      */
+     public lastLogon?: Date; 
+     /**
+      * @description A collection of groups where user belongs.
+      */
+     public groups?: Array<Account>; 
     /**
      * Validates the given username and password and returns an instance of user on success.
      * @param {ExpressDataContext} context
@@ -59,4 +88,4 @@ class User extends Account {
     }
     
 }
-module.exports = User;
+export default User;
