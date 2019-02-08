@@ -15,7 +15,7 @@ var serverDir = options.base;
 //server startup script
 var serverScript = path.resolve(buildDir, "server.js");
 
-var debugServerScript = path.resolve(serverDir, "server.ts");
+var debugServerScript = path.resolve(serverDir, "../bin/www");
 
 // lint server modules
 gulp.task('lint', () => {
@@ -36,7 +36,7 @@ gulp.task('build', ['lint', 'copy'], () => {
     return gulp.src(`${serverDir}/**/*.ts`)
         .pipe(sourcemaps.init())
         .pipe(tsProject())
-        .pipe(sourcemaps.write('.'))
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest(buildDir));
 });
 
@@ -55,12 +55,10 @@ gulp.task('serve', [ ], function() {
     const debug = process.execArgv.filter(function(x) { return /^--inspect(-brk)?=\d+$/.test(x); })[0];
     //if process is running in debug mode (--debug or --debug-brk arguments)
     if (debug) {
-        //find debug port
-        const debugPort = parseInt(/^--inspect(-brk)?=(\d+)$/.exec(debug)[2]);
         //get execution arguments except --debug or --debug-brk
         execArgv = process.execArgv.filter(function(x) { return !/^--inspect(-brk)?=\d+$/.test(x); }).splice(0);
         //push debug argument (while increasing debug port by 1)
-        execArgv.push(debug.substr(0,debug.indexOf('=')+1)+(debugPort+1));
+        execArgv.push(debug.substr(0,debug.indexOf('=')));
     }
     else {
         //otherwise get execution arguments

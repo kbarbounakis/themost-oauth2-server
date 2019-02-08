@@ -79,61 +79,65 @@ export class LoginService {
         return this[scopeProperty];
     }
 
-    login(userName, userPassword, callback) {
-        const self = this, client_id = this.getClient(), scope = this.getScope();
-        self.getContext().model('AuthClient').silent().where('client_id').equal(client_id).getItem().then((client) => {
-            if (_.isNil(client)) {
-                return callback(new InvalidClientError());
-            }
-            //validate scopes
-            //split scopes
-            const scopes = scope.split(' ');
-            return self.getContext().model('AuthScope').where('name').equal(scopes).silent().cache(true).getItems().then(function(returnedScopes) {
-                if (returnedScopes.length!==scopes.length) {
-                    return callback(new InvalidScopeError());
+    login(userName: string, userPassword: string): Promise<any> {
+        const self = this;
+        return new Promise( (resolve, reject) => {
+            const client_id = self.getClient(), scope = self.getScope();
+            self.getContext().model('AuthClient').silent().where('client_id').equal(client_id).getItem().then((client) => {
+                if (_.isNil(client)) {
+                    return reject(new InvalidClientError());
                 }
-                //validate credentials
-                return validate(self, userName, userPassword).then(function(user) {
-                    if (_.isNil(user)) {
-                        //authentication failed
-                        return callback(new InvalidCredentialsError());
+                //validate scopes
+                //split scopes
+                const scopes = scope.split(' ');
+                return self.getContext().model('AuthScope').where('name').equal(scopes).silent().cache(true).getItems().then(function(returnedScopes) {
+                    if (returnedScopes.length!==scopes.length) {
+                        return reject(new InvalidScopeError());
                     }
-                    //get expiration timeout
-                    const expirationTimeout = (LangUtils.parseInt(self.getContext().getApplication().getConfiguration().settings.auth['timeout']) || 480)*60*1000;
-                    //calculate expiration time
-                    const expires = moment(new Date()).add(expirationTimeout, 'ms').toDate();
-                    //get access tokens model
-                    const accessTokens = self.getContext().model('AccessToken'),
-                        //create new token (for the specified client)
-                        token = {
-                            client_id: client_id,
-                            user_id:user.name,
-                            expires: expires,
-                            scope: scope
-                        };
-                    return accessTokens.where('client_id').equal(client_id)
-                        .and('user_id').equal(user.name)
-                        .and('expires').greaterThan(new Date()).silent()
-                        .and('scope').equal(scope)
-                        .getTypedItem().then((accessToken)=> {
-                            if (_.isObject(accessToken)) {
-                                self.getContext().getApplication().getStrategy(AuthStrategy).setAuthCookie(self.getContext(), user.name);
-                                accessToken.expires = moment(accessToken.expires).toDate();
-                                return callback(null, accessToken);
-                            }
-                            //save token
-                            return accessTokens.silent().save(token).then(()=> {
-                                //set auth cookie
-                                self.getContext().getApplication().getStrategy(AuthStrategy).setAuthCookie(self.getContext(), user.name);
-                                return callback(null, token);
+                    //validate credentials
+                    return validate(self, userName, userPassword).then(function(user) {
+                        if (_.isNil(user)) {
+                            //authentication failed
+                            return reject(new InvalidCredentialsError());
+                        }
+                        //get expiration timeout
+                        const expirationTimeout = (LangUtils.parseInt(self.getContext().getApplication().getConfiguration().settings.auth['timeout']) || 480)*60*1000;
+                        //calculate expiration time
+                        const expires = moment(new Date()).add(expirationTimeout, 'ms').toDate();
+                        //get access tokens model
+                        const accessTokens = self.getContext().model('AccessToken'),
+                            //create new token (for the specified client)
+                            token = {
+                                client_id: client_id,
+                                user_id:user.name,
+                                expires: expires,
+                                scope: scope
+                            };
+                        return accessTokens.where('client_id').equal(client_id)
+                            .and('user_id').equal(user.name)
+                            .and('expires').greaterThan(new Date()).silent()
+                            .and('scope').equal(scope)
+                            .getTypedItem().then((accessToken)=> {
+                                if (_.isObject(accessToken)) {
+                                    self.getContext().getApplication().getStrategy(AuthStrategy).setAuthCookie(self.getContext(), user.name);
+                                    accessToken.expires = moment(accessToken.expires).toDate();
+                                    return resolve(accessToken);
+                                }
+                                //save token
+                                return accessTokens.silent().save(token).then(()=> {
+                                    //set auth cookie
+                                    self.getContext().getApplication().getStrategy(AuthStrategy).setAuthCookie(self.getContext(), user.name);
+                                    return resolve(token);
+                                });
                             });
-                        });
+                    });
                 });
+            }).catch((err) => {
+                TraceUtils.error(err);
+                return reject(new Error('Login failed due to identity server error.'));
             });
-        }).catch((err) => {
-            TraceUtils.error(err);
-            return callback(new Error('Login failed due to identity server error.'));
-        });
+        })
+       
 
     }
 

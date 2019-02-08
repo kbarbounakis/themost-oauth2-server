@@ -6,10 +6,10 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-import HttpBaseController from '@themost/web/controllers/base';
+import {HttpBaseController} from '@themost/web';
+import {HttpResult} from '@themost/web/mvc';
 import {EncryptionStrategy} from '@themost/web/handlers/auth';
 import {TraceUtils} from '@themost/common/utils';
-import {HttpServerError} from '@themost/common/errors';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import {httpGet,httpPost,httpAction,httpParam,httpController} from '@themost/web/decorators';
@@ -88,42 +88,36 @@ class AuthController extends HttpBaseController {
     @httpAction("me")
     @httpGet()
     @httpParam({ name:"access_token", type:"Text",pattern:/^[a-zA-Z0-9]+$/,maxLength:255 })
-    getMe(access_token: string): Promise<any> {
-        const self = this;
-        return new Promise((resolve) => {
-
+    async getMe(access_token: string): Promise<HttpResult> {
+        try {
             //if access token is missing search for Authorization:Bearer [Access Token] header
             if (_.isNil(access_token)) {
-                const authorizationHeader = self.context.request.headers['authorization'];
+                const authorizationHeader = this.context.request.headers['authorization'];
                 if (_.isString(authorizationHeader)) {
                     if (/^Bearer\s+/.test(authorizationHeader)) {
                         access_token = authorizationHeader.replace(/^Bearer\s+/,'');
                     }
                 }
             }
-            return self.context.model('AccessToken')
-                .where('access_token').equal(access_token).silent()
-                .getItem().then(function(result) {
-                    if (_.isNil(result)) {
-                        return resolve(self.json(AuthControllerMessages.tokenNotFound).status(AuthControllerMessages.tokenNotFound.code));
-                    }
-                    if (result.expires) {
-                        if (result.expires<(new Date())) {
-                            return resolve(self.json(AuthControllerMessages.tokenExpired).status(400));
-                        }
-                    }
-                    return self.context.model('User').where('name').equal(result.user_id).silent().getItem().then(function (user) {
-                        if (_.isNil(user)) {
-                            return resolve(self.json(AuthControllerMessages.profileNotFound).status(400));
-                        }
-                        return resolve(self.json({ id:user.id, name:user.name }));
-                    });
-                }).catch(function (err) {
-                    TraceUtils.error(err);
-                    return resolve(self.json(AuthControllerMessages.serverError).status(500));
-                });
-
-        });
+            // get access token
+            let token = await this.context.model('AccessToken').where('access_token').equal(access_token).silent().getItem();
+            if (typeof token === 'undefined') {
+                return this.json(AuthControllerMessages.tokenNotFound).status(AuthControllerMessages.tokenNotFound.code);
+            }
+            if (token.expires) {
+                return this.json(AuthControllerMessages.tokenExpired).status(400);
+            }
+            // get user
+            let user = await this.context.model('User').where('name').equal(token.user_id).silent().getItem();
+            if (typeof user === 'undefined') {
+                return this.json(AuthControllerMessages.profileNotFound).status(400);
+            }
+            return this.json({ id:user.id, name:user.name });
+        }
+        catch (err) {
+            TraceUtils.error(err);
+            return this.json(AuthControllerMessages.serverError).status(500);
+        }
     }
 
     /**
@@ -132,41 +126,36 @@ class AuthController extends HttpBaseController {
     @httpAction("tokeninfo")
     @httpPost()
     @httpParam({ name:"access_token", type:"Text",pattern:/^[a-zA-Z0-9]+$/,maxLength:255 })
-    postTokenInfo(access_token: string): Promise<any> {
-        const self = this;
-        let accessTokens = self.context.model('AccessToken');
-        let access_token_attr = accessTokens.field('access_token');
-        return new Promise((resolve)=> {
+    async postTokenInfo(access_token: string): Promise<HttpResult> {
+        try {
+            // get access_token attribute
+            let access_token_attr = this.context.model('AccessToken').field('access_token');
+            // validate access_token attribute size
             if (access_token_attr.size && access_token.length>access_token_attr.size) {
-                return resolve(self.json(AuthControllerMessages.tokenNotFound).status(AuthControllerMessages.tokenNotFound.code));
+                return this.json(AuthControllerMessages.tokenNotFound).status(AuthControllerMessages.tokenNotFound.code);
             }
-            return accessTokens
-                .where('access_token').equal(access_token)
-                .silent()
-                .cache(true)
-                .getItem()
-                .then(function(token) {
-                    //if token was not found
-                    if (_.isNil(token)) {
-                        return resolve(self.json(AuthControllerMessages.tokenNotFound).status(AuthControllerMessages.tokenNotFound.code));
-                    }
-                    const now = new Date();
-                    const expires = moment(token.expires);
-                    const result = {
-                        "active":expires.diff(now)>0,
-                        "scope":token.scope,
-                        "client_id":token.client_id,
-                        "username":token.user_id,
-                        "exp":expires.diff(moment('1970-01-01'),'seconds')
-                    };
-                    return resolve(self.json(result));
-                }).catch((err)=> {
-                    TraceUtils.error(err);
-                    return resolve(self.json(AuthControllerMessages.serverError).status(AuthControllerMessages.serverError.code));
-                });
-        });
-
-
+            // get token
+            let token = await this.context.model('AccessToken').where('access_token').equal(access_token).silent().cache(true).getItem();
+            if (typeof token === 'undefined') {
+                return this.json(AuthControllerMessages.tokenNotFound).status(AuthControllerMessages.tokenNotFound.code);
+            }
+            const now = new Date();
+            const expires = moment(token.expires);
+            // set new access token
+            const result = {
+                "active":expires.diff(now)>0,
+                "scope":token.scope,
+                "client_id":token.client_id,
+                "username":token.user_id,
+                "exp":expires.diff(moment('1970-01-01'),'seconds')
+            };
+            // return token
+            return this.json(result);
+        }
+        catch (err) {
+            TraceUtils.error(err);
+            return this.json(AuthControllerMessages.serverError).status(AuthControllerMessages.serverError.code);
+        }
     }
 
     /**
@@ -178,38 +167,39 @@ class AuthController extends HttpBaseController {
     @httpParam({ name:"client_id", type:"Text",pattern:/^[a-zA-Z0-9]+$/,maxLength:48 })
     @httpParam({ name:"client_secret", type:"Text",pattern:/^[a-zA-Z0-9]+$/,maxLength:48 })
     @httpParam({ name:"code", type:"Text",pattern:/^[a-zA-Z0-9]+$/,maxLength:128 })
-    getAccessToken(client_id: string, client_secret: string, code: string): Promise<any> {
-        const self = this;
-        return new Promise((resolve) => {
-            self.context.model('AuthClient').where('client_id').equal(client_id)
-                .and('client_secret').equal(client_secret)
-                .silent()
-                .count().then(function(count) {
-                if (count === 0) {
-                    return resolve(self.json(AuthControllerMessages.invalidData).status(AuthControllerMessages.invalidData.code));
-                }
-                return self.context.model('AccessToken')
-                    .where('access_token').equal(self.context.getApplication().getStrategy(EncryptionStrategy).decrypt(code))
-                    .silent()
-                    .getItem()
-                    .then(function(token) {
-                        if (_.isNil(token)) {
-                            return resolve(self.json(AuthControllerMessages.tokenNotFound).status(AuthControllerMessages.tokenNotFound.code));
-                        }
-                        return resolve(self.json({
-                            "access_token":token.access_token,
-                            "expires": token.expires,
-                            "refresh_token":token.refresh_token,
-                            "token_type":"bearer",
-                            "scope":token.scope
-                        }).status(200));
-                    }).catch(function(err) {
-                        TraceUtils.error(err);
-                        return resolve(self.json(AuthControllerMessages.serverError).status(AuthControllerMessages.serverError.code));
-                    });
-
-            });
-        });
+    async getAccessToken(client_id: string, client_secret: string, code: string): Promise<HttpResult> {
+        try {
+            // validate client
+            let count = await this.context.model('AuthClient').where('client_id').equal(client_id)
+                                        .and('client_secret').equal(client_secret)
+                                        .silent()
+                                        .count();
+            if (count === 0) {
+                return this.json(AuthControllerMessages.invalidData).status(AuthControllerMessages.invalidData.code);
+            }
+            // get access token
+            let token = await this.context.model('AccessToken')
+                            .where('access_token')
+                            .equal(this.context.getApplication().getStrategy(EncryptionStrategy).decrypt(code))
+                            .silent()
+                            .getItem();
+            // if token does exist
+            if (typeof token === 'undefined') {
+                // throw error
+                return this.json(AuthControllerMessages.tokenNotFound).status(AuthControllerMessages.tokenNotFound.code);
+            }
+            return this.json({
+                        "access_token":token.access_token,
+                        "expires": token.expires,
+                        "refresh_token":token.refresh_token,
+                        "token_type":"bearer",
+                        "scope":token.scope
+                    }).status(200);
+        }
+        catch (err) {
+            TraceUtils.error(err);
+            return this.json(AuthControllerMessages.serverError).status(AuthControllerMessages.serverError.code);
+        }
     }
 
     /**
@@ -221,48 +211,41 @@ class AuthController extends HttpBaseController {
     @httpParam({ name:"redirect_uri", type:"Text",maxLength:256 })
     @httpParam({ name:"response_type", type:"Text",pattern:/^[a-zA-Z0-9]+$/,maxLength:48 })
     @httpParam({ name:"scope", type:"Text",pattern:/[a-zA-Z0-9\s.\-+_]+$/,maxLength:128 })
-    getAuthorize(client_id: string, redirect_uri: string, response_type?: string, scope?: string): Promise<any> {
-        const self = this;
-        return new Promise((resolve) => {
-            //get request params
-            response_type = response_type || 'code' ;
-            return self.context.model('AuthClient').where('client_id').equal(client_id)
-                .silent()
-                .expand('scopes')
-                .getTypedItem()
-                .then(function(result) {
-                    if (_.isNil(result)) {
-                        return resolve(self.view(AuthControllerMessages.invalidData).setName("error").status(400));
-                    }
-                    if (!result.hasGrantType(response_type)) {
-                        return resolve(self.view(AuthControllerMessages.invalidGrant).setName("error").status(400));
-                    }
-                    if (redirect_uri && !result.hasRedirectUri(redirect_uri)) {
-                        return resolve(self.view(AuthControllerMessages.invalidData).setName("error").status(400));
-                    }
-                    // get redirect uri
-                    redirect_uri = redirect_uri || result.redirect_uri;
-                    // get already defined client scopes
-                    let clientScope;
-                    if (result.scopes && result.scopes.length) {
-                        // create a comma separated list of client scopes
-                        clientScope = result.scopes.map( x => x.name).join(',');
-                    }
-                    // get scope from request or scopes associated with this client or the default profile scope
-                    scope = scope || clientScope || 'profile';
-                    // validate scope
-                    return result.hasScope(scope).then((hasScope) => {
-                        if (hasScope) {
-                            return resolve(self.redirect(self.context.getApplication().resolveUrl(`~/login?response_type=${response_type}&redirect_uri=${encodeURIComponent(redirect_uri)}&client_id=${client_id}&scope=${scope}`)));
-                        }
-                        // throw error of invalid scope
-                        return resolve(self.json(AuthControllerMessages.invalidScope).status(400));
-                    });
-            }).catch(function (err) {
-                TraceUtils.error(err);
-                return resolve(new HttpServerError());
-            });
-        });
+    async getAuthorize(client_id: string, redirect_uri: string, response_type?: string, scope?: string): Promise<HttpResult> {
+        try {
+            // get client
+            let client = await this.context.model('AuthClient').where('client_id').equal(client_id).silent().expand('scopes').getTypedItem();
+            if (typeof client === 'undefined') {
+                return this.view(AuthControllerMessages.invalidData).setName("error").status(400);
+            }
+            if (!client.hasGrantType(response_type)) {
+                return this.view(AuthControllerMessages.invalidGrant).setName("error").status(400);
+            }
+            if (redirect_uri && !client.hasRedirectUri(redirect_uri)) {
+                return this.view(AuthControllerMessages.invalidData).setName("error").status(400);
+            }
+            // get redirect uri
+            redirect_uri = redirect_uri || client.redirect_uri;
+            // get already defined client scopes
+            let clientScope;
+            if (client.scopes && client.scopes.length) {
+                // create a comma separated list of client scopes
+                clientScope = client.scopes.map( x => x.name).join(',');
+            }
+            // get scope from request or scopes associated with this client or the default profile scope
+            scope = scope || clientScope || 'profile';
+            // validate scope
+            let hasScope = await client.hasScope(scope);
+            if (hasScope) {
+                return this.redirect(this.context.getApplication().resolveUrl(`~/login?response_type=${response_type}&redirect_uri=${encodeURIComponent(redirect_uri)}&client_id=${client_id}&scope=${scope}`));
+            }
+            // throw error of invalid scope
+            return this.view(AuthControllerMessages.invalidScope).status(400);
+        }
+        catch (err) {
+            TraceUtils.error(err);
+            return this.view(AuthControllerMessages.serverError).status(500);
+        }
     }
 
     /**
@@ -276,53 +259,57 @@ class AuthController extends HttpBaseController {
     @httpParam({ name:"scope", type:"Text",pattern:/^[a-zA-Z.\s,]+$/,maxLength:256 })
     @httpParam({ name:"username", type:"Text",maxLength:128 })
     @httpParam({ name:"password", type:"Text",maxLength:128 })
-    postAuthorize(grant_type: string, client_id: string, client_secret: string, scope: string, username: string, password: string): Promise<any> {
-        const self = this;
-        return new Promise((resolve, reject) => {
-            //get request params
-            self.context.model('AuthClient')
-                .where("client_id").equal(client_id)
-                .and('client_secret').equal(client_secret).silent().getTypedItem().then((client) => {
-                    if (_.isNil(client)) {
-                        return resolve(self.json(AuthControllerMessages.invalidData).status(400));
+    async postAuthorize(grant_type: string, client_id: string, client_secret: string, scope: string, username: string, password: string): Promise<HttpResult> {
+        try {
+                // validate scope
+            if (typeof scope === 'undefined') {
+                return this.json(AuthControllerMessages.invalidScope).status(400);
+            }
+            // get client
+            let client = await this.context.model('AuthClient')
+                                            .where("client_id").equal(client_id)
+                                            .and('client_secret').equal(client_secret).silent().getTypedItem();
+                    // 
+            if (typeof client === 'undefined') {
+                return this.json(AuthControllerMessages.invalidData).status(400);
+            }
+            if (!client.hasGrantType(grant_type)) {
+                return this.json(AuthControllerMessages.invalidGrant).status(400);
+            }
+            
+            let hasScope = await client.hasScope(scope);
+            if (hasScope) {
+                const loginService = new LoginService(this.context, client_id);
+                // validate credentials
+                try {
+                    let token = await loginService.login(username,password);
+                    //set response
+                    return this.json({
+                        "token_type":"Bearer",
+                        "expires_in":token.expires.getTime(),
+                        "access_token": token.access_token,
+                        "refresh_token":token.refresh_token,
+                        "scope":token.scope
+                    });
+                }
+                catch(err) {
+                    // handle error
+                    if (err instanceof InvalidClientError) {
+                        return this.json(AuthControllerMessages.invalidData).status(400);
                     }
-                    if (!client.hasGrantType(grant_type)) {
-                        return resolve(self.json(AuthControllerMessages.invalidGrant).status(400));
+                    else if (err instanceof InvalidCredentialsError) {
+                        return this.json(AuthControllerMessages.invalidCredentials).status(AuthControllerMessages.invalidCredentials.code);
                     }
-                    if (_.isNil(scope)) {
-                        return resolve(self.json(AuthControllerMessages.invalidScope).status(400));
-                    }
-                    return client.hasScope(scope).then((hasScope)=> {
-                        if (hasScope) {
-                            const loginService = new LoginService(self.context, client_id);
-                            return loginService.login(username,password, (err, token)=> {
-                                if (err) {
-                                    if (err instanceof InvalidClientError) {
-                                        return resolve(self.json(AuthControllerMessages.invalidData).status(400));
-                                    }
-                                    else if (err instanceof InvalidCredentialsError) {
-                                        return resolve(self.json(AuthControllerMessages.invalidCredentials).status(AuthControllerMessages.invalidCredentials.code));
-                                    }
-                                    return resolve(self.json(AuthControllerMessages.serverError).status(AuthControllerMessages.serverError.code));
-                                }
-                                //set response
-                                return resolve(self.json({
-                                    "token_type":"Bearer",
-                                    "expires_in":token.expires.getTime(),
-                                    "access_token": token.access_token,
-                                    "refresh_token":token.refresh_token,
-                                    "scope":token.scope
-                                }));
-                            });
-                        }
-                        // throw error of invalid scope
-                        return resolve(self.json(AuthControllerMessages.invalidScope).status(400));
-                    })
-            }).catch((err)=> {
-                return reject(err);
-            });
-
-        });
+                    return this.json(AuthControllerMessages.serverError).status(AuthControllerMessages.serverError.code);
+                }
+            }
+             return this.json(AuthControllerMessages.invalidScope).status(400);
+        }
+        catch (err) {
+            TraceUtils.error(err);
+            return this.json(AuthControllerMessages.serverError).status(AuthControllerMessages.serverError.code);
+        }
+        
     }
 
 }

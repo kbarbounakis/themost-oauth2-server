@@ -6,7 +6,7 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-import HttpBaseController from '@themost/web/controllers/base';
+import {HttpBaseController} from '@themost/web';
 import {HttpResult} from '@themost/web/mvc';
 import {AuthStrategy,EncryptionStrategy} from '@themost/web/handlers/auth';
 import {TraceUtils } from "@themost/common/utils";
@@ -53,9 +53,6 @@ class RootController extends HttpBaseController {
         return this.redirect(request.query.continue || this.context.getApplication().resolveUrl('~/'));
     }
 
-    /**
-     * @returns {Promise|*}
-     */
     @httpAction("index")
     @httpGet()
     async getIndex(): Promise<HttpResult> {
@@ -92,90 +89,79 @@ class RootController extends HttpBaseController {
     @httpParam({ name:"response_type", type:"Text",pattern:/^(code|token)$/,maxLength:48 })
     @httpParam({ name:"scope", type:"Text",pattern:/[a-zA-Z0-9\s.\-+_]+$/,maxLength:128 })
     @httpGet()
-    async getLogin(client_id: string, response_type?: string, redirect_uri?: string, scope?: string): Promise<any> {
-        const self = this;
-        const authorization_id = self.context.getApplication().getConfiguration().settings.auth['client_id'];
-        let request_client_id = client_id || authorization_id;
-        // noinspection JSUnusedLocalSymbols
-        return new Promise((resolve)=> {
-            //get query string parameters
-            let userData;
-            try {
-                userData = JSON.parse(self.context.getApplication().getStrategy(AuthStrategy).getAuthCookie(self.context));
+    async getLogin(client_id: string, response_type?: string, redirect_uri?: string, scope?: string): Promise<HttpResult> {
+        try {
+            const authorization_id = this.context.getApplication().getConfiguration().settings.auth['client_id'];
+            let request_client_id = client_id || authorization_id;
+            // get client
+            let client = await this.context.model('AuthClient').silent().where('client_id').equal(request_client_id).expand('scopes').getTypedItem();   
+            // if client is undefined
+            if (typeof client === undefined) {
+                // return an outdated data error (400 - Bad Request)
+                return this.view(new OutdatedDataError()).status(400);
             }
-            catch (e) {
-                //do nothing
-            }
+            // extract user data from auth cookie
+            let userData = JSON.parse(this.context.getApplication().getStrategy(AuthStrategy).getAuthCookie(this.context));
             if (userData) {
-                self.context.model('AuthClient').silent().where('client_id').equal(client_id).expand('scopes').getTypedItem().then((client)=> {
-                    if (client) {
-                        self.context.model('User').silent().where('name').equal(userData.user).select('id','name').getItem().then((user)=> {
-                            if (user) {
-                                const accessTokens = self.context.model('AccessToken');
-                                accessTokens.silent()
-                                    .where('client_id').equal(client_id)
-                                    .and('user_id').equal(user.name)
-                                    .and('expires').greaterThan(new Date())
-                                    .getItem().then(function(existedToken) {
-                                    if (_.isObject(existedToken)) {
-                                        //redirect back to client
-                                        if (client_id === authorization_id) {
-                                            return resolve(self.redirect(self.context.getApplication().resolveUrl('~/user')));
-                                        }
-                                        if (redirect_uri && !client.hasRedirectUri(redirect_uri)) {
-                                            TraceUtils.error(`Invalid redirect uri for client ${client.client_id}, redirect_uri=${redirect_uri}`);
-                                            return resolve(self.view(new InvalidDataError()).status(400));
-                                        }
-                                        if (response_type === 'token') {
-                                            if (!client.hasGrantType(response_type)) {
-                                                return resolve(self.view(new OutdatedDataError('EGRANT')).status(401));
-                                            }
-                                            return resolve(self.redirect(`${(redirect_uri || client.redirect_uri)}?response_type=token&access_token=${existedToken.access_token}&token_type=bearer`));
-                                        }
-                                        return resolve(self.redirect((redirect_uri || client.redirect_uri) + '?response_type=code&code=' + self.context.getApplication().getStrategy(EncryptionStrategy).encrypt(existedToken.access_token)));
-                                    }
-                                    return resolve(self.view());
-
-                                }).catch(function (err) {
-                                    TraceUtils.error(err);
-                                    return resolve(self.view(new IdentityServerError()).status(500));
-                                });
-                            }
-                            else {
-                                return resolve(self.view(new ValidateCredentialsError()).status(401));
-                            }
-                        }).catch((err)=> {
-                            TraceUtils.error(err);
-                            return resolve(self.view(new ValidateCredentialsError()).status(500));
-                        });
+                // get user
+                let user = await this.context.model('User').silent().where('name').equal(userData.user).select('id','name').getItem();
+                if (typeof user === 'undefined') {
+                    // throw error for invalid credentials (401 - Unauthorized)
+                    return this.view(new ValidateCredentialsError()).status(401);
+                }
+                // get active access token
+                let token = await this.context.model('AccessToken')
+                                        .where('client_id').equal(client_id)
+                                        .and('user_id').equal(user.name)
+                                        .and('expires').greaterThan(new Date())
+                                        .silent()
+                                        .getItem();
+                // if there is no active access token
+                if (typeof token === 'undefined') {
+                    // return to view
+                    return this.view();
+                }
+                // validate client
+                if (client_id === authorization_id) {
+                    // if client is equal to authorization server redirect to user page
+                    return this.redirect(this.context.getApplication().resolveUrl('~/user'));
+                }
+                // validate redirect uri
+                if (redirect_uri && !client.hasRedirectUri(redirect_uri)) {
+                    TraceUtils.error(`Invalid redirect uri for client ${client.client_id}, redirect_uri=${redirect_uri}`);
+                    // throw error for invalid redirect uri
+                    return this.view(new InvalidDataError()).status(400);
+                }
+                // if response type is equal to token (implicit grant)
+                if (response_type === 'token') {
+                    // validate grant type
+                    if (!client.hasGrantType(response_type)) {
+                        // and throw error of client does not allow to use the specified grant type
+                        return this.view(new OutdatedDataError('EGRANT')).status(401);
                     }
-                    else {
-                        //do nothing
-                        return resolve(self.view());
-                    }
-                }).catch((err)=> {
-                    TraceUtils.error(err);
-                    return resolve(self.view(new OutdatedDataError()).status(401));
-                });
+                    // redirect to the specified redirect uri with the access token
+                    return this.redirect(`${(redirect_uri || client.redirect_uri)}?response_type=token&access_token=${token.access_token}&token_type=bearer`);
+                }
+                // get encypted access token
+                let encryptedToken =  this.context.getApplication().getStrategy(EncryptionStrategy).encrypt(token.access_token);
+                // use authorization code flow and redirect user to the given redirect uri
+                return this.redirect((redirect_uri || client.redirect_uri) + '?response_type=code&code=' + encryptedToken);
             }
             else {
-                // validate client and scope
-                return self.context.model('AuthClient').silent().where('client_id').equal(request_client_id).expand('scopes').getTypedItem().then(function (client) {
-                    if (_.isNil(client)) {
-                        return resolve(self.view(new OutdatedDataError()).status(400));
-                    }
-                    return client.hasScope(scope || 'profile').then(hasScope => {
-                        if (hasScope) {
-                            return resolve(self.view());
-                        }
-                        // throw error of invalid scope
-                        return resolve(self.view(new InvalidDataError()).status(400));
-                    });
-
-                });
+                // get client scope
+                let hasScope = await client.hasScope(scope || 'profile');
+                // if client has the defined scope
+                if (hasScope) {
+                    return this.view();
+                }
+                // otherwise return an outdated data error (401 - Unathorized)
+                return this.view(new OutdatedDataError()).status(401);
             }
-
-        });
+        }
+        catch (err) {
+            TraceUtils.error(err);
+            return this.view(new IdentityServerError()).status(500);
+        }
     }
 
     @httpAction("login")
@@ -220,14 +206,7 @@ class RootController extends HttpBaseController {
                     return client.hasScope(scope).then(hasScope => {
                         if (hasScope) {
                             const loginService = new LoginService(self.context, request_client_id,scope);
-                            return loginService.login(credentials.username,credentials.password, (err, token)=> {
-                                if (err) {
-                                    if (err instanceof InvalidCredentialsError) {
-                                        return resolve(self.view(new UnknownUsernameOrPasswordError(credentials.username)).status(401));
-                                    }
-                                    TraceUtils.error(err);
-                                    return resolve(self.view(new LoginServerError(credentials && credentials.username)).status(500));
-                                }
+                            return loginService.login(credentials.username,credentials.password).then( token => {
                                 if (_.isNil(client_id)) {
                                     return resolve(self.redirect(self.context.getApplication().resolveUrl('~/user')));
                                 }
@@ -237,6 +216,12 @@ class RootController extends HttpBaseController {
                                     }
                                     return resolve(self.redirect((redirect_uri || client.redirect_uri) + '?response_type=code&code=' + self.context.getApplication().getStrategy(EncryptionStrategy).encrypt(token.access_token)));
                                 }
+                            }).catch( err => {
+                                if (err instanceof InvalidCredentialsError) {
+                                    return resolve(self.view(new UnknownUsernameOrPasswordError(credentials.username)).status(401));
+                                }
+                                TraceUtils.error(err);
+                                return resolve(self.view(new LoginServerError(credentials && credentials.username)).status(500));
                             });
                         }
                         TraceUtils.error(`Invalid scope for client ${client.client_id}, redirect_uri=${redirect_uri}, scope=${scope}`);

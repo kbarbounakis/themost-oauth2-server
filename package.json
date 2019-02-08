@@ -1,6 +1,6 @@
 {
   "name": "themost-oauth2-server",
-  "version": "0.1.1",
+  "version": "2.1.0",
   "description": "OAuth2 server based on @themost/data ORM module",
   "main": "dist/server/server.js",
   "repository": "",
@@ -25,7 +25,7 @@
     "gulp-typescript": "^5.0.0-alpha.2",
     "ts-node": "^7.0.0",
     "tslint": "^5.10.0",
-    "typescript": "^2.9.2"
+    "typescript": "^3.3.3"
   },
   "dependencies": {
     "@themost/common": "^2.1.4",

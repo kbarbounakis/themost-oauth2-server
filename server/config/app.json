@@ -1,4 +1,7 @@
 {
+    "engines": [
+        { "name": "EJS View Engine", "extension": "ejs", "type": "@themost/web/engines/ejs" }
+    ],
     "settings": {
         "app": {
           "title": "OAuth2 Server"  

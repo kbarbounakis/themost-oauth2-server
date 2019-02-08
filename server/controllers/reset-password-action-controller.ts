@@ -6,7 +6,7 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-import HttpBaseController from '@themost/web/controllers/base';
+import {HttpBaseController} from '@themost/web';
 import {TraceUtils,RandomUtils,TextUtils} from '@themost/common/utils';
 import {HttpViewResult} from '@themost/web/mvc';
 import {httpGet,httpPost,httpAction,httpParam,httpController} from '@themost/web/decorators';
