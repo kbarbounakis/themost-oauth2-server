@@ -11,7 +11,6 @@ import {EdmMapping} from '@themost/data/odata';
 import Thing from './thing-model';
 /**
  * @class
- 
  * @property {number} id
  * @property {number} accountType
  * @augments {DataObject}
@@ -19,19 +18,18 @@ import Thing from './thing-model';
 @EdmMapping.entityType('Account')
 class Account extends Thing {
     /**
+     * @description The identifier of the item.
+     */
+     public id: number = 0;
+     /**
+      * @description Contains a set of flags that define the type and scope of an account object.
+      */
+     public accountType?: number;
+    /**
      * @constructor
      */
     constructor() {
         super();
     }
-    /**
-      * @description The identifier of the item.
-      */
-     public id: number = 0; 
-     
-     /**
-      * @description Contains a set of flags that define the type and scope of an account object.
-      */
-     public accountType?: number; 
 }
 export default Account;

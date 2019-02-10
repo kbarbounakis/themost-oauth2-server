@@ -13,22 +13,35 @@ import Thing from './thing-model';
 
 @EdmMapping.entityType('Action')
 class Action extends Thing {
+    public actionStatus: any;
+
+    public target: any;
+
+    public owner: any;
+
+    public agent: any;
+
+    public object: any;
+
+    public startTime?: Date;
+
+    public endTime?: Date;
     constructor() {
         super();
-        this.selector('overdue', (callback)=> {
+        this.selector('overdue', (callback) => {
             if (this.hasOwnProperty('endTime')) {
                 const endTime = moment(this.endTime);
                 if (endTime.isValid()) {
-                    return callback(null, endTime.toDate()<(new Date()));
+                    return callback(null, endTime.toDate() < (new Date()));
                 }
             }
             return this.getModel()
                 .where('id').equal(this.getId())
                 .silent()
-                .select('endTime').value().then((value)=> {
+                .select('endTime').value().then((value) => {
                     const endTime = moment(value);
                     if (endTime.isValid()) {
-                        return callback(null, endTime.toDate()<(new Date()));
+                        return callback(null, endTime.toDate() < (new Date()));
                     }
                     return callback(null, false);
                 }).catch((err) => {
@@ -36,22 +49,8 @@ class Action extends Thing {
             });
         });
     }
-    
-    public actionStatus: any;
-    
-    public target: any;
-    
-    public owner: any;
-    
-    public agent: any;
-    
-    public object: any;
-    
-    public startTime?: Date;
-    
-    public endTime?: Date;
 
-    isOverdue() {
+    public isOverdue() {
         return this.is(':overdue');
     }
 

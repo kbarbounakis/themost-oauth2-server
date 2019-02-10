@@ -25,7 +25,8 @@ export function afterSave(event: DataEventArgs, callback: (err?: Error) => void)
             .subject('Password Reminder (theMOST Authentication Services)')
             .template('reminder').send(event.target, (err) => {
                 if (err) {
-                    TraceUtils.error('An error occured while sending password reminder message for password reset action with ID:' + target.id);
+                    TraceUtils.error('An error occurred while sending password reminder message ' +
+                        'for password reset action with ID:' + target.id);
                 }
                 return callback(err);
         });

@@ -1,3 +1,32 @@
-<h1><%= model.message %></h1>
-<h2><%= model.status %></h2>
-<pre><%= model.stack %></pre>
+<!DOCTYPE html>
+<html lang="<%=html.context.culture()%>">
+<head>
+    <title><%=html.context.application.getConfiguration().getSourceAt("settings/app/title")%></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="vendor/uikit/css/uikit.min.css"/>
+</head>
+<body>
+<div class="uk-container">
+    <div class="uk-grid-small uk-child-width-1-2@s uk-flex-center" uk-grid>
+        <div>
+            <div class="uk-card uk-position-center uk-card-default uk-card-body">
+                <h3 class="uk-card-title"><%= model.statusCode %>
+                <span>Something went wrong</span>
+                </h3>
+                <p>
+                    <%= model.message %>
+                </p>
+                <% if (model.stack) { %>
+                    <pre><%= model.stack %></pre>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="vendor/uikit/js/uikit.min.js"></script>
+<script src="vendor/uikit/js/uikit-icons.min.js"></script>
+</html>
+
+
