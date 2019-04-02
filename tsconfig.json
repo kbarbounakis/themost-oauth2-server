@@ -1,12 +1,11 @@
 {
     "compilerOptions": {
         "preserveSymlinks": true,
-        "target": "es5",
+        "target": "es6",
         "module": "commonjs",
         "moduleResolution": "node",
         "sourceMap": true,
-        "inlineSourceMap": false,
-        "inlineSources": false,
+        "inlineSourceMap": true,
         "strictPropertyInitialization": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,

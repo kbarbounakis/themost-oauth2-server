@@ -1,7 +1,7 @@
 {
+    "$schema": "https://themost-framework.github.io/themost/models/2018/2/schema.json",
     "@id": "https://themost.io/schemas/Account",
     "name": "Account",
-    "id": 92,
     "title": "Accounts",
     "inherits": "Thing",
     "hidden": false,

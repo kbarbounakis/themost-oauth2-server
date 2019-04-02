@@ -1,5 +1,5 @@
 {
-    "id": 5486683,
+    "$schema": "https://themost-framework.github.io/themost/models/2018/2/schema.json",
     "@id": "http://schema.org/UpdateAction",
     "name": "UpdateAction",
     "title": "Update Action",
@@ -7,16 +7,8 @@
     "hidden": true,
     "sealed": false,
     "inherits": "Action",
-    "version":"1.5",
+    "version":"1.1",
     "fields": [
-        {
-            "name": "id",
-            "title": "ID",
-            "description": "The identifier of the item.",
-            "type": "Integer",
-            "nullable": false,
-            "primary": true
-        }
     ],
     "privileges": [
         {

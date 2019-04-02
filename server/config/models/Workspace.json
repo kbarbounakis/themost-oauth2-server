@@ -1,12 +1,12 @@
 {
+    "$schema": "https://themost-framework.github.io/themost/models/2018/2/schema.json",
     "name": "Workspace",
     "@id": "https://themost.io/schemas/Workspace",
-    "id": 3694315,
     "title": "Workspaces",
     "hidden": false,
     "sealed": false,
     "abstract": false,
-    "version": "1.0",
+    "version": "2.2",
     "fields": [
         {
             "name": "id",
@@ -61,6 +61,11 @@
             "mask": 1,
             "type": "global",
             "account": "*"
+        },
+        {
+            "mask": 15,
+            "type": "global",
+            "account": "Administrators"
         },
         {
             "mask": 15,

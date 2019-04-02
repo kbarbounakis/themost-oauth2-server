@@ -19,10 +19,18 @@ class AccessToken extends DataObject {
     
     constructor() {
         super();
-        this.selector('expired', (callback) => {
-            const expired = (new Date(this.expires)).getTime()<(new Date()).getTime();
-            return callback(null, expired);
+        this.selector('expired', callback => {
+            return this.isExpired().then(expired => {
+               return callback(null, expired); 
+            }).catch(err => {
+                return callback(err);
+            });
         });
+    }
+    
+    async isExpired() {
+        const expired = (new Date(this.expires)).getTime()<(new Date()).getTime();
+        return expired;
     }
     
    /**

@@ -8,13 +8,20 @@
  */
 import {HttpBaseController} from '@themost/web';
 import {HttpResult} from '@themost/web/mvc';
-import {EncryptionStrategy} from '@themost/web/handlers/auth';
+import {EncryptionStrategy, AuthStrategy} from '@themost/web';
 import {TraceUtils} from '@themost/common/utils';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import {httpGet,httpPost,httpAction,httpParam,httpController} from '@themost/web/decorators';
 import {LoginService} from '../services/login-service';
-import {InvalidClientError, InvalidCredentialsError} from '../errors';
+import {InvalidClientError, InvalidCredentialsError, OutdatedDataError, InvalidDataError, IdentityServerError, ValidateCredentialsError, LoginServerError, UnknownUsernameOrPasswordError} from '../errors';
+
+
+import {IncomingMessage} from 'http';
+
+interface IncomingMessageQuery extends IncomingMessage {
+    query: any;
+}
 
 const AuthControllerMessages = {
     serverError: {
@@ -80,6 +87,32 @@ class AuthController extends HttpBaseController {
      */
     constructor() {
         super();
+    }
+    
+    @httpAction("index")
+    @httpGet()
+    async getIndex(): Promise<HttpResult> {
+        let request = this.context.request as IncomingMessageQuery;
+        if (request.query.lang) {
+            //change language
+            let cultures = this.context.getApplication().getConfiguration().getSourceAt('settings/localization/cultures');
+            if (Array.isArray(cultures)) {
+                let culture = cultures.find(x =>{
+                   return x.substr(0,2) === request.query.lang;
+                });
+                if (culture) {
+                    this.context.setCookie('.LANG', culture, moment().add(1,'year').toDate());
+                    // get referer
+                    let referer = this.context.request.headers['referer'];
+                    if (typeof referer === 'string') {
+                        return this.redirect(referer);
+                    }
+                    // redirect to hone
+                    return this.redirect(this.context.getApplication().resolveUrl('~/auth/login'));
+                }
+            }
+        }
+        return this.view();
     }
     
     /**
@@ -312,6 +345,185 @@ class AuthController extends HttpBaseController {
         
     }
 
+    // noinspection JSUnusedLocalSymbols
+    /**
+     * @returns {Promise|*}
+     */
+    @httpAction("login")
+    @httpParam({ name:"client_id", type:"Text",pattern:/^[a-zA-Z0-9]+$/,maxLength:48 })
+    @httpParam({ name:"redirect_uri", type:"Text",maxLength:256 })
+    @httpParam({ name:"response_type", type:"Text",pattern:/^(code|token)$/,maxLength:48 })
+    @httpParam({ name:"scope", type:"Text",pattern:/[a-zA-Z0-9\s.\-+_]+$/,maxLength:128 })
+    @httpGet()
+    async getLogin(client_id: string, response_type?: string, redirect_uri?: string, scope?: string): Promise<HttpResult> {
+        try {
+            const authorization_id = this.context.getApplication().getConfiguration().settings.auth['client_id'];
+            let request_client_id = client_id || authorization_id;
+            // get client
+            let client = await this.context.model('AuthClient').silent().where('client_id').equal(request_client_id).expand('scopes').getTypedItem();   
+            // if client is undefined
+            if (typeof client === undefined) {
+                // return an outdated data error (400 - Bad Request)
+                return this.view(new OutdatedDataError()).status(400);
+            }
+            // extract user data from auth cookie
+            let userData = JSON.parse(this.context.getApplication().getStrategy(AuthStrategy).getAuthCookie(this.context));
+            if (userData) {
+                // get user
+                let user = await this.context.model('User').silent().where('name').equal(userData.user).select('id','name').getItem();
+                if (typeof user === 'undefined') {
+                    // throw error for invalid credentials (401 - Unauthorized)
+                    return this.view(new ValidateCredentialsError()).status(401);
+                }
+                // get active access token
+                let token = await this.context.model('AccessToken')
+                                        .where('client_id').equal(client_id)
+                                        .and('user_id').equal(user.name)
+                                        .and('expires').greaterThan(new Date())
+                                        .silent()
+                                        .getItem();
+                // if there is no active access token
+                if (typeof token === 'undefined') {
+                    // return to view
+                    return this.view();
+                }
+                // validate client
+                if (client_id === authorization_id) {
+                    // if client is equal to authorization server redirect to user page
+                    return this.redirect(this.context.getApplication().resolveUrl('~/user'));
+                }
+                // validate redirect uri
+                if (redirect_uri && !client.hasRedirectUri(redirect_uri)) {
+                    TraceUtils.error(`Invalid redirect uri for client ${client.client_id}, redirect_uri=${redirect_uri}`);
+                    // throw error for invalid redirect uri
+                    return this.view(new InvalidDataError()).status(400);
+                }
+                // if response type is equal to token (implicit grant)
+                if (response_type === 'token') {
+                    // validate grant type
+                    if (!client.hasGrantType(response_type)) {
+                        // and throw error of client does not allow to use the specified grant type
+                        return this.view(new OutdatedDataError('EGRANT')).status(401);
+                    }
+                    // redirect to the specified redirect uri with the access token
+                    return this.redirect(`${(redirect_uri || client.redirect_uri)}?response_type=token&access_token=${token.access_token}&token_type=bearer`);
+                }
+                // get encypted access token
+                let encryptedToken =  this.context.getApplication().getStrategy(EncryptionStrategy).encrypt(token.access_token);
+                // use authorization code flow and redirect user to the given redirect uri
+                return this.redirect((redirect_uri || client.redirect_uri) + '?response_type=code&code=' + encryptedToken);
+            }
+            else {
+                // get client scope
+                let hasScope = await client.hasScope(scope || 'profile');
+                // if client has the defined scope
+                if (hasScope) {
+                    return this.view();
+                }
+                // otherwise return an outdated data error (401 - Unathorized)
+                return this.view(new OutdatedDataError()).status(401);
+            }
+        }
+        catch (err) {
+            TraceUtils.error(err);
+            return this.view(new IdentityServerError()).status(500);
+        }
+    }
+    
+    @httpAction("login")
+    @httpPost()
+    @httpParam({ name:"client_id", type:"Text",pattern:/^[a-zA-Z0-9]+$/,maxLength:48 })
+    @httpParam({ name:"redirect_uri", type:"Text",maxLength:256 })
+    @httpParam({ name:"response_type", type:"Text",pattern:/^(code|token)$/,maxLength:48 })
+    @httpParam({ name:"scope", type:"Text",pattern:/[a-zA-Z0-9\s.\-+_]+$/,maxLength:128 })
+    async postLogin(client_id, redirect_uri, response_type, credentials, scope) {
+        // get oauth2 server self client_id
+        const authorization_id = this.context.getApplication().getConfiguration().settings.auth['client_id'];
+        // get request client_id or oauth2 self assigned client_id
+        const request_client_id = client_id || authorization_id;
+        try {
+            //validate anti-forgery token
+            this.context.validateAntiForgeryToken();
+            // validate Client ID
+            if (!/^\d+$/.test(request_client_id)) {
+                return this.view(new InvalidDataError()).status(405);
+            }
+            // get client
+            const client = await this.context.model('AuthClient')
+                    .silent()
+                    .where('client_id').equal(request_client_id)
+                    .expand('scopes')
+                    .getTypedItem();
+            // if client is undefined
+            if (client == null) {
+                // throw error for outdated data
+                return this.view(new OutdatedDataError()).status(401);
+            }
+            // validate grant type
+            if (response_type && !client.hasGrantType(response_type)) {
+                // throw error if the specified grant type is not assigned to the client
+                return this.view(new OutdatedDataError()).status(400);
+            }
+            // if a scope is not defined and client has scopes
+            if (scope == null && client.scopes && client.scopes.length) {
+                // get a concatenated string with client scopes for further validation
+                scope = client.scopes.map( x => x.name).join(',');
+            }
+            // validate scope as string
+            if (scope == null) {
+                TraceUtils.error(`Missing scope for client ${client.client_id}, redirect_uri=${redirect_uri}`);
+                return this.view(new OutdatedDataError()).status(401);
+            }
+            // validate redirect_uri
+            if (redirect_uri && !client.hasRedirectUri(redirect_uri)) {
+                TraceUtils.error(`Invalid redirect uri for client ${client.client_id}, redirect_uri=${redirect_uri}`);
+                return this.view(new InvalidDataError()).status(400);
+            }
+            const hasScope = await client.hasScope(scope);
+            if (hasScope) {
+                // get login service for current context
+                const loginService = new LoginService(this.context, request_client_id,scope);
+                // validate credentials
+                try {
+                    let token = await loginService.login(credentials.username,credentials.password);  
+                    if (client_id == null) {
+                        // redirect to default page
+                        return this.redirect(this.context.getApplication().resolveUrl('~/user'));
+                        if (response_type === 'token') {
+                            return this.redirect(`${(redirect_uri || client.redirect_uri)}?response_type=token&access_token=${token.access_token}&token_type=bearer`);
+                        }
+                        return this.redirect((redirect_uri || client.redirect_uri) + '?response_type=code&code=' + this.context.getApplication().getStrategy(EncryptionStrategy).encrypt(token.access_token));
+                    }
+                }
+                catch (err) {
+                    if (err instanceof InvalidCredentialsError) {
+                        return this.view(new UnknownUsernameOrPasswordError(credentials.username)).status(401);
+                    }
+                    throw err;
+                }
+            }
+            TraceUtils.error(`Invalid scope for client ${client.client_id}, redirect_uri=${redirect_uri}, scope=${scope}`);
+            return this.view(new InvalidDataError()).status(400);
+        }
+        catch (err) {
+            // trace error
+            TraceUtils.error(err);
+            // return generate login server error (500)
+            return this.view(new LoginServerError(credentials && credentials.username)).status(500);
+        }
+    }
+    
+    @httpAction("logout")
+    @httpGet()
+    @httpPost()
+    async getLogout(): Promise<HttpResult> {
+        // set auth cookie to nothing
+        this.context.getApplication().getStrategy(AuthStrategy).setAuthCookie(this.context, 'anonymous', { expires: new Date(1970, 1, 1) });
+        // cast request object
+        let request = this.context.request as IncomingMessageQuery;
+        // redirect to home or continue URI
+        return this.redirect(request.query.continue || this.context.getApplication().resolveUrl('~/'));
+    }
 }
 
 export default AuthController;

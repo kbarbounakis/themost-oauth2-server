@@ -1,3 +1,8 @@
+# Editor
+.idea
+.vscode
+.DS_store
+
 # Logs
 logs
 *.log
@@ -59,6 +64,3 @@ typings/
 
 # next.js build output
 .next
-
-# release
-dist

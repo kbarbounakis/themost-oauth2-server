@@ -1,8 +1,8 @@
 {
-    "id": 6674498,
+    "$schema": "https://themost-framework.github.io/themost/models/2018/2/schema.json",
     "@id": "http://schema.org/EntryPoint",
     "name": "EntryPoint",
-    "title": "Entry Point",
+    "title": "EntryPoints",
     "description": "An entry point, within some Web-based protocol.",
     "hidden": false,
     "sealed": false,

@@ -1,12 +1,12 @@
 {
+    "$schema": "https://themost-framework.github.io/themost/models/2018/2/schema.json",
     "name": "User",
-    "id": 90,
     "title": "Users",
     "inherits": "Account",
     "hidden": false,
     "sealed": false,
     "abstract": false,
-    "version": "1.4",
+    "version": "2.2",
     "fields": [
         {
             "@id": "https://themost.io/schemas/id",
@@ -117,8 +117,6 @@
                 "name"
             ]
         }
-    ],
-    "views": [
     ],
     "seed": [
         {

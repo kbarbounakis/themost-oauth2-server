@@ -100,4 +100,4 @@ class AuthClient extends DataObject {
 
 }
 
-export default AuthClient;
+export = AuthClient;

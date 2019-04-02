@@ -1,7 +1,7 @@
 {
+    "$schema": "https://themost-framework.github.io/themost/models/2018/2/schema.json",
     "name": "AuthClient",
-    "id": 151,
-    "title": "OAuth2 Clients",
+    "title": "AuthClients",
     "hidden": true,
     "sealed": false,
     "abstract": false,

@@ -1,13 +1,13 @@
 {
+    "$schema": "https://themost-framework.github.io/themost/models/2018/2/schema.json",
     "@id": "https://themost.io/schemas/AccessToken",
     "name": "AccessToken",
-    "id": 2021335,
-    "title": "Access Tokens",
+    "title": "AccessTokens",
     "description": "Access tokens are credentials used to access protected resources.",
     "hidden": true,
     "sealed": false,
     "abstract": false,
-    "version": "1.7",
+    "version": "1.1",
     "caching": "conditional",
     "fields": [
         {

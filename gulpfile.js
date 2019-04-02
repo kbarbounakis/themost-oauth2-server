@@ -40,14 +40,6 @@ gulp.task('build', ['lint', 'copy'], () => {
         .pipe(gulp.dest(buildDir));
 });
 
-function build(src) {
-    return gulp.src(src)
-        .pipe(sourcemaps.init())
-        .pipe(tsProject())
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(buildDir));
-}
-
 // serve app
 gulp.task('serve', [ ], function() {
     let server, options, execArgv = [];
