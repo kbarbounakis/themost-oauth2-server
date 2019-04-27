@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="<%=html.context.culture()%>">
+<head>
+    <title><%=html.context.application.getConfiguration().getSourceAt("settings/app/title")%></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="vendor/uikit/css/uikit.min.css"/>
+    <%- stylesheets %>
+</head>
+<body>
+    <%- body %>
+</body>
+<script src="vendor/uikit/js/uikit.min.js"></script>
+<script src="vendor/uikit/js/uikit-icons.min.js"></script>
+<%- scripts %>
+</html>
+
+

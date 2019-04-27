@@ -5,7 +5,6 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "sourceMap": true,
-        "inlineSourceMap": true,
         "strictPropertyInitialization": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
@@ -13,8 +12,8 @@
         "noImplicitAny": false,
         "resolveJsonModule": true,
         "declaration": true,
-        "strict": true,
-        "stripInternal": true,
+        "strict": false,
+        "stripInternal": false,
         "typeRoots": [
             "node_modules/@types"
         ],
@@ -22,6 +21,8 @@
     },
     "exclude": [
         "node_modules",
-        "server/cli"
+        "server/cli",
+        "dist/",
+        "bin/www"
     ]
 }

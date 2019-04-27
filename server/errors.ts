@@ -78,7 +78,7 @@ export class InvalidDataError extends DataError {
 
 export class InvalidClientError extends DataError {
     /**
-     * @param {string=} messsage
+     * @param {string=} message
      */
     constructor(messsage?: string) {
         super("ECLIENT", messsage || "Invalid or outdated client data.");

@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 # Editor
 .idea
 .vscode
 .DS_store
 
+=======
+# idea
+.idea
+>>>>>>> 50e27596f5a778b632e6f9389f21ae065ccde091
 # Logs
 logs
 *.log

@@ -18,56 +18,6 @@ import {EdmMapping} from '@themost/data/odata';
  */
 @EdmMapping.entityType('AuthClient')
 class AuthClient extends DataObject {
-    constructor() {
-        super();
-    }
-
-    /**
-     * @param {string} grant_type
-     * @returns {boolean}
-     */
-    hasGrantType(grant_type: string): boolean {
-        if (typeof this.grant_type !== 'string') {
-            return false;
-        }
-        return (this.grant_type.split(',').indexOf(grant_type)>=0);
-    }
-
-    /**
-     * @param {string} redirect_uri
-     * @returns {boolean}
-     */
-    hasRedirectUri(redirect_uri: string): boolean {
-        if (typeof redirect_uri === 'string') {
-            let re = new RegExp('^' + this.redirect_uri.replace("*","(.*?)") + '$','ig');
-            return re.test(redirect_uri);
-        }
-        return false;
-    }
-    
-    /**
-     * @param {string} scope
-     * @returns {Promise<boolean>}
-     */
-    async hasScope(scope: string): Promise<boolean> {
-        if (typeof scope !== 'string') {
-            throw new TypeError('Invalid argument. Scope must be a string');
-        }
-        // split scopes
-        let scopes = scope.split(',');
-        if (Array.isArray(this.scopes)) {
-            let found = scopes.filter(scope => {
-                return this.scopes.findIndex( x=> {
-                   return new RegExp('^' + scope + '$','i').test(x.name);
-                })>=0;
-            }).length;
-            return found === scopes.length;
-        }
-        // count scopes
-        let count = await this.property('scopes').where('name').equal(scopes).silent().count();
-        // count must be equal to scopes length
-        return count === scopes.length;
-    }
     /**
      * @description Gets or sets a string which represents an OAuth2 client identfier
      */
@@ -82,22 +32,76 @@ class AuthClient extends DataObject {
      */
     public client_secret: string;
     /**
-     * @description Gets or sets a string which represents an OAuth2 client redirect URI 
+     * @description Gets or sets a string which represents an OAuth2 client redirect URI
      * e.g. https://example.com/app/*
      */
     public redirect_uri: string;
     /**
-     * @description Gets or sets a string which represents a comma separeted list of grant types 
+     * @description Gets or sets a string which represents a comma separeted list of grant types
      * e.g. code;token etc
      */
      public grant_type: string;
-     /**
+    /**
      * @description Gets or sets an array of objects which represent the client available scopes
      */
-     public scopes: Array<any>;
-    
-    
+    public scopes: any[];
+    constructor() {
+        super();
+    }
+
+    /**
+     * @param {string} grant_type
+     * @returns {boolean}
+     */
+    public hasGrantType(grant_type: string): boolean {
+        if (typeof this.grant_type !== 'string') {
+            return false;
+        }
+        return (this.grant_type.split(',').indexOf(grant_type) >= 0);
+    }
+
+    /**
+     * @param {string} redirect_uri
+     * @returns {boolean}
+     */
+    public hasRedirectUri(redirect_uri: string): boolean {
+        if (typeof redirect_uri === 'string') {
+            const re = new RegExp('^' + this.redirect_uri.replace('*', '(.*?)') + '$', 'ig');
+            return re.test(redirect_uri);
+        }
+        return false;
+    }
+
+    /**
+     * @param {string} scope
+     * @returns {Promise<boolean>}
+     */
+    public async hasScope(scope: string): Promise<boolean> {
+        if (typeof scope !== 'string') {
+            throw new TypeError('Invalid argument. Scope must be a string');
+        }
+        // split scopes
+        const scopes = scope.split(',');
+        if (Array.isArray(this.scopes)) {
+            const found = scopes.filter((thisScope) => {
+                return this.scopes.findIndex( (x) => {
+                   return new RegExp('^' + thisScope + '$', 'i').test(x.name);
+                }) >= 0;
+            }).length;
+            return found === scopes.length;
+        }
+        // count scopes
+        const count = await this.property('scopes').where('name').equal(scopes).silent().count();
+        // count must be equal to scopes length
+        return count === scopes.length;
+    }
+
+
 
 }
 
+<<<<<<< HEAD
 export = AuthClient;
+=======
+export default AuthClient;
+>>>>>>> 50e27596f5a778b632e6f9389f21ae065ccde091

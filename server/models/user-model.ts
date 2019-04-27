@@ -9,10 +9,10 @@
  */
 import {EdmMapping} from '@themost/data/odata';
 import {TextUtils} from '@themost/common/utils';
-let Account = require('./account-model');
+import Account from './account-model';
+
 /**
  * @class
- 
  * @property {number} id
  * @property {Date} lockoutTime
  * @property {number} logonCount
@@ -25,56 +25,21 @@ let Account = require('./account-model');
 @EdmMapping.entityType('User')
 class User extends Account {
     /**
-     * @constructor
-     */
-    constructor() {
-        super();
-    }
-    /**
-      * @description The identifier of the item.
-      */
-     public id: number = 0; 
-     /**
-      * @description The date and time that this account was locked out.
-      */
-     public lockoutTime?: Date; 
-     /**
-      * @description The number of times the account has successfully logged on.
-      */
-     public logonCount?: number; 
-     /**
-      * @description Indicates whether a user is enabled or not.
-      */
-     public enabled: boolean = false; 
-     
-     /**
-      * @description Indicates whether a user is external authenticated or not.
-      */
-     public external: boolean = false; 
-     /**
-      * @description The last time and date the user logged on.
-      */
-     public lastLogon?: Date; 
-     /**
-      * @description A collection of groups where user belongs.
-      */
-     public groups?: Array<Account>; 
-    /**
      * Validates the given username and password and returns an instance of user on success.
-     * @param {ExpressDataContext} context
+     * @param {DataContext} context
      * @param {string} username
      * @param {string} password
      * @returns Promise<User>
-     */ 
-    static async validate(context, username, password) {
+     */
+    public static async validate(context, username, password) {
         // get user
-        let user = await context.model('User').where('name').equal(username).silent().getTypedItem();
+        const user = await context.model('User').where('name').equal(username).silent().getTypedItem();
         // if user does exist return
         if (typeof user === 'undefined' || user === null) {
             return;
         }
         // check if username and password are valid
-        let exists = await context.model('UserCredential')
+        const exists = await context.model('UserCredential')
                 .where('userPassword').equal('{clear}'.concat(password))
                 .or('userPassword').equal('{md5}' + TextUtils.toMD5(password))
                 .or('userPassword').equal('{sha1}' + TextUtils.toSHA1(password))
@@ -86,6 +51,41 @@ class User extends Account {
             return user;
         }
     }
-    
+     /**
+      * @description The identifier of the item.
+      */
+     public id: number = 0;
+     /**
+      * @description The date and time that this account was locked out.
+      */
+     public lockoutTime?: Date;
+     /**
+      * @description The number of times the account has successfully logged on.
+      */
+     public logonCount?: number;
+     /**
+      * @description Indicates whether a user is enabled or not.
+      */
+     public enabled: boolean = false;
+
+     /**
+      * @description Indicates whether a user is external authenticated or not.
+      */
+     public external: boolean = false;
+     /**
+      * @description The last time and date the user logged on.
+      */
+     public lastLogon?: Date;
+     /**
+      * @description A collection of groups where user belongs.
+      */
+     public groups?: Account[];
+    /**
+     * @constructor
+     */
+    constructor() {
+        super();
+    }
+
 }
 export default User;

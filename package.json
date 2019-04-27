@@ -22,7 +22,7 @@
     "gulp-sourcemaps": "^2.6.4",
     "gulp-tslint": "^8.1.3",
     "gulp-typescript": "^5.0.0-alpha.2",
-    "ts-node": "^7.0.0",
+    "ts-node": "^8.0.3",
     "tslint": "^5.10.0",
     "typescript": "^3.3.3"
   },
@@ -43,5 +43,20 @@
     "popper.js": "^1.14.7",
     "prompt": "^1.0.0",
     "yargs": "^12.0.5"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "server/",
+      "./bin/www"
+    ],
+    "verbose": true,
+    "execMap": {
+      "js": "node --nolazy --require ts-node/register",
+      "ts": "node --nolazy --require ts-node/register"
+    },
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "ext": "ts,json"
   }
 }

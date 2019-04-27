@@ -8,15 +8,17 @@
  */
 import {HttpApplication} from '@themost/web/app';
 import {resolve} from 'path';
-import "./extensions/http-context-extensions";
-import {TraceUtils} from "@themost/common";
+import './extensions/http-context-extensions';
+import {TraceUtils} from '@themost/common';
+import {LocalizationStrategy, I18nLocalizationStrategy} from '@themost/web';
+
 const app = new HttpApplication(resolve(__dirname));
-
-//use static content
+// use static content
 app.useStaticContent(resolve(process.cwd(), './public'));
-
-//handle error response
-app.on('error', function(event, callback) {
+// use i18n localization strategy
+app.useStrategy(LocalizationStrategy, I18nLocalizationStrategy);
+// handle error response
+app.on('error', (event, callback) => {
     // get context
     const context = event.context;
     // get client response
@@ -27,13 +29,12 @@ app.on('error', function(event, callback) {
     TraceUtils.error(error);
     if (/application\/json/g.test(context.request.headers.accept) || context.format === 'json') {
         return context.application.errors.json(context, error, callback);
-    }
-    else {
+    } else {
         // get application error template
-        let errorTemplateFile = resolve(__dirname, 'views/error/error.html.ejs');
+        const errorTemplateFile = resolve(__dirname, 'views/error/error.html.ejs');
         // use application engine to render error
         context.engine('ejs').render(errorTemplateFile, Object.assign({}, error), (err, data) => {
-            // if error occured while rendering application error template
+            // if error occurred while rendering application error template
             if (err) {
                 // trace error
                 TraceUtils.error('An error occurred while rendering application error');
@@ -44,19 +45,19 @@ app.on('error', function(event, callback) {
                 return response.end();
             }
             // otherwise send html error
-            response.writeHead(error.statusCode || 500 , { "Content-Type": "text/html" });
+            response.writeHead(error.statusCode || 500 , { 'Content-Type': 'text/html' });
             response.write(data);
             response.end();
         });
     }
 });
 
-process.on('SIGTERM', function() {
-        console.log("\nSIGTERM Terminating");
+process.on('SIGTERM', () => {
+        TraceUtils.log('\nSIGTERM Terminating');
         process.exit(0);
     })
-    .on('SIGINT', function() {
-        console.log("\nSIGINT Terminating");
+    .on('SIGINT', () => {
+        TraceUtils.log('\nSIGINT Terminating');
         process.exit(0);
     });
 

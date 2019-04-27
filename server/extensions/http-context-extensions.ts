@@ -6,37 +6,35 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-import * as _ from 'lodash';
 import {URL} from 'url';
 import {HttpContext} from '@themost/web';
 
 declare interface HttpContextExtensions extends HttpContext {
-    getServerOrigin(): string
-    resolveAbsoluteUrl(relative: string): string
+    getServerOrigin(): string;
+    resolveAbsoluteUrl(relative: string): string;
 }
 
 Object.defineProperty(HttpContext.prototype, 'getServerOrigin', {
-   get: function() {
+   get: () => {
        return function getServerOrigin(this: HttpContextExtensions) {
-            let origin = this.getApplication().getConfiguration().getSourceAt('settings/app/origin') || process.env.ORIGIN;
+            const origin = this.getApplication().getConfiguration().getSourceAt('settings/app/origin') || process.env.ORIGIN;
             if (typeof origin !== 'undefined' && origin !== null) {
                 return origin;
-            }
-            else if (typeof this.request.headers['x-forwarded-host'] === 'string') {
-                return (this.request.headers['x-forwarded-proto'] || 'http') + '://' + this.request.headers['x-forwarded-host'];
-            }
-            else {
+            } else if (typeof this.request.headers['x-forwarded-host'] === 'string') {
+                return (this.request.headers['x-forwarded-proto'] || 'http')
+                    + '://' + this.request.headers['x-forwarded-host'];
+            } else {
                 return (this.request.headers.protocol || 'http') + '://' + this.request.headers.host;
             }
         };
-   } 
+   }
 });
 
 Object.defineProperty(HttpContext.prototype, 'resolveAbsoluteUrl', {
-   get: function() {
+   get: () => {
        return function resolveAbsoluteUrl(this: HttpContextExtensions, relative: string) {
             return new URL(this.getServerOrigin(), this.getApplication().resolveUrl(relative)).toString();
         };
-   } 
+   }
 });
 

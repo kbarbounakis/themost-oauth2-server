@@ -16,7 +16,7 @@ import {EdmMapping} from '@themost/data/odata';
  */
 @EdmMapping.entityType('AccessToken')
 class AccessToken extends DataObject {
-    
+
     constructor() {
         super();
         this.selector('expired', callback => {
@@ -40,16 +40,16 @@ class AccessToken extends DataObject {
      /**
       * @description Gets or sets a string which represents a user.
       */
-    public user_id: number; 
+    public user_id: number;
      /**
       * Gets or sets a string which represents an access token.
       */
-    public access_token: string; 
+    public access_token: string;
      /**
       * @description Gets or sets the expiration date time.
       */
-    public expires: Date; 
-    
+    public expires: Date;
+
 }
 
 export default AccessToken;
