@@ -1,0 +1,21 @@
+<%# { "layout":"./../shared/master.html.ejs", "title":"Login Status" } %>
+<div class="row justify-content-center">
+    <div class="col-md-9">
+        <div class="card-group">
+            <div class="card border-0">
+                <div class="card-body">
+                    <h1 class="text-primary text-center card-title"><span>Student</span> Information System</h1>
+                    <div class="text-center mb-5 mt-5">
+                        <img src="assets/img/user_icon.svg" alt="User icon">
+                    </div>
+                    <div class="pt-1 pb-4">
+                        <p class="card-description text-justify"><%=html.context.translate('SuccesfullyLoggedIn')%></p>
+                    </div>
+                    <div class="text-center">
+                        <a href="/logout" class="btn btn-primary"><%=html.context.translate('SignoutLabel')%></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

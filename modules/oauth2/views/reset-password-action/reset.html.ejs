@@ -1,0 +1,118 @@
+<%# { "layout":"./../shared/master.html.ejs", "title":"Reset Password" } %>
+<div class="row justify-content-center" ng-controller="ResetPasswordController as ctrl">
+    <div class="col-md-8">
+        <div class="card-group">
+            <div class="card p-4">
+                <div class="card-body" <%- model.username ? "ng-init=\"username='" + model.username  + "';\"" : "" %>>
+                    <form class="form" name="form" method="post" action="" novalidate="novalidate">
+                        <h1 server-translate="">Reset your password</h1>
+                        <input type="hidden" server-anti-forgery="">
+                        <p class="text-muted" server-translate="">Enter your new password below:</p>
+                        <div class="input-group mb-3">
+                            <span class="input-group-addon"><i class="icon-lock"></i></span>
+                            <input spellcheck="false" ng-model="newPassword"
+                                   required="required" ng-pattern="ctrl.passwordPattern"
+                                   type="password" id="newPassword" name="newPassword"
+                                   class="form-control" server-translate=""
+                                   placeholder="New password">
+                        </div>
+                        <div class="input-group mb-4">
+                            <span class="input-group-addon"><i class="icon-lock-open"></i></span>
+                            <input spellcheck="false" server-translate="" ng-model="confirmPassword"
+                                   compare-to="newPassword" ng-pattern="ctrl.passwordPattern"
+                                   required="required" type="password"
+                                   id="confirmPassword" name="confirmPassword" class="form-control"
+                                   placeholder="Re-type new password">
+                        </div>
+                        <div class="justify-content-center">
+                            <p class="text-center pt-2">
+                                <span class="text-danger" ng-show="form.confirmPassword.$touched && form.confirmPassword.$dirty &&  form.confirmPassword.$invalid && form.confirmPassword.$error.compareTo" server-translate="">Password does not match confirm password.</span>
+                                <span class="text-danger" ng-show="form.newPassword.$touched &&  form.newPassword.$dirty && form.newPassword.$error.pattern" server-translate="">The new password does not meet the password policy requirements.</span>
+                            </p>
+                        </div>
+                        <% if (model.code === 'EFAIL') { %>
+                        <div class="col-sm-12 justify-content-center" ng-show="form.confirmPassword.$pristine && form.newPassword.$pristine">
+                            <p  class="text-danger" server-translate=""><%=model.message%></p>
+                        </div>
+                        <%}%>
+                        <div class="justify-content-center">
+                            <p class="text-center pt-2"><span><span server-translate="">Note</span>: </span> <span server-translate="">PasswordNote</span></p>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary px-4" server-translate="">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
+                <div class="card-body text-center">
+                    <div>
+                        <h2 server-translate="">Not a member?</h2>
+                        <a class="btn btn-primary active mt-3" server-translate="">Sign up now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-none col-md-4 col-sm-6 ml-auto mr-auto" ng-controller="ResetPasswordController as ctrl">
+    <form class="form" name="form" method="post" action="<%=html.context.request.url%>" novalidate="novalidate">
+        <input type="hidden" server-anti-forgery="">
+        <div class="card card-login card-hidden">
+            <div class="card-header card-header-rose text-center">
+                <h4 class="card-title" server-translate="">Reset your password</h4>
+            </div>
+            <div class="card-body ">
+                <p class="card-description text-center" server-translate="">Enter your new password below:</p>
+                <span class="bmd-form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="material-icons">lock_outline</i>
+                      </span>
+                    </div>
+                      <input spellcheck="false" ng-model="newPassword"
+                             required="required" ng-pattern="ctrl.passwordPattern"
+                             type="password" id="newPassword" name="newPassword"
+                             class="form-control" server-translate=""
+                             placeholder="New password">
+                  </div>
+                </span>
+                <span class="bmd-form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="material-icons">lock_outline</i>
+                      </span>
+                    </div>
+                      <input spellcheck="false" server-translate="" ng-model="confirmPassword"
+                             compare-to="newPassword" ng-pattern="ctrl.passwordPattern"
+                             required="required" type="password"
+                             id="confirmPassword" name="confirmPassword" class="form-control"
+                             placeholder="Re-type new password">
+                  </div>
+                </span>
+                <div class="col-sm-12 justify-content-center">
+                    <p class="text-center pt-2">
+                        <span class="text-danger" ng-show="form.confirmPassword.$touched && form.confirmPassword.$dirty &&  form.confirmPassword.$invalid && form.confirmPassword.$error.compareTo" server-translate="">Password does not match confirm password.</span>
+                        <span class="text-danger" ng-show="form.newPassword.$touched &&  form.newPassword.$dirty && form.newPassword.$error.pattern" server-translate="">The new password does not meet the password policy requirements.</span>
+                    </p>
+                </div>
+                <% if (model.code === 'EFAIL') { %>
+                    <div class="col-sm-12 justify-content-center" ng-show="form.confirmPassword.$pristine && form.newPassword.$pristine">
+                        <p  class="text-danger" server-translate=""><%=model.message%></p>
+                    </div>
+                <%}%>
+                <div class="col-sm-12 justify-content-center">
+                    <p class="text-center pt-2"><span><span server-translate="">Note</span>: </span> <span server-translate="">PasswordNote</span></p>
+                </div>
+            </div>
+            <div class="card-footer justify-content-center">
+                <button type="submit" ng-disabled="form.$invalid" class="btn btn-rose btn-link btn-lg" server-translate="">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,22 @@
+<%# { "layout":"./../shared/master.html.ejs", "title":"Reset Password" } %>
+<div class="col-md-4 col-sm-6 ml-auto mr-auto">
+    <div class="card card-login card-hidden">
+        <div class="card-header card-header-rose text-center">
+            <h4 class="card-title" server-translate="" server-strip-accents="">Reset password failed</h4>
+        </div>
+        <div class="card-body">
+            <div class="col-sm-12 justify-content-center">
+                <p class="text-center text-danger" server-translate="">
+                    <span server-translate="">The data is invalid. The verification code is invalid or has been expired.</span>
+            <span server-translate="">Please try again following the instructions which are provided in the reset password message.</span>
+                </p>
+                <p class="text-center">
+                    <span server-translate="">If the problem persists, request a new reset password verification code by clicking the link below.</span>
+                </p>
+            </div>
+        </div>
+        <div class="card-footer justify-content-center">
+            <a href="/password/reminder" class="btn btn-rose btn-link btn-lg" server-translate="">Forgot your password?</a>
+        </div>
+    </div>
+</div>

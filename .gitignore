@@ -62,3 +62,4 @@ typings/
 
 # release
 dist
+package-lock.json

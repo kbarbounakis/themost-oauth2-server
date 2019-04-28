@@ -13,6 +13,9 @@ module.exports = function (api) {
                 }
             ]
         ],
+        "ignore": [
+            "node_modules"
+            ],
         "plugins": [
             [
                 "@babel/plugin-transform-async-to-generator"

@@ -1,0 +1,32 @@
+[
+    {
+        "url": "/api/{controller:plural}/?",
+        "action": "index",
+        "format": "json"
+    },
+    {
+        "url": "/api/{controller:plural}/:action/?",
+        "format": "json"
+    },
+    {
+        "url": "/?",
+        "controller": "root",
+        "action": "index",
+        "format": "html"
+    },
+    {
+        "url": "/:action.html",
+        "controller": "root",
+        "format": "html"
+    },
+    {
+        "url": "/{controller:plural}/?",
+        "action": "index",
+        "format": "html"
+    },
+    {
+        "url": "/{controller:plural}/:action.html",
+        "format": "html"
+    }
+    
+]

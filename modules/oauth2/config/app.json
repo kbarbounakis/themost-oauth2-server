@@ -1,0 +1,78 @@
+{
+    "handlers": [
+        { "name":"node_modules", "type":"@themost/web/handlers/node-modules" }
+    ],
+    "engines": [
+        { "name": "EJS View Engine", "extension": "ejs", "type": "@themost/web/engines/ejs" },
+        { "name": "Markdown View Engine", "extension": "md", "type": "@themost/web/engines/md" }
+    ],
+    "settings": {
+        "app": {
+            "title": "MOST Web Framework | Authentication Services",
+            "shortTitle": "MOST Web Framework",
+            "origin":"http://localhost:3000"
+        },
+        "i18n":{
+            "locales":["en","el"],
+            "defaultLocale":"el"
+        },
+        "crypto": {
+            "algorithm": "aes256",
+            "key": "7239755955645775376461417a54663658464e715334327a6d65774534654e4c6d674d77417155483562754c4678455875704e327175754475663575626e6259"
+        },
+        "auth": {
+            "unattendedExecutionAccount":"DKuHN2MJLwuFznD7sz",
+            "name": ".AUTH",
+            "timeout": 480,
+            "slidingExpiration": false,
+            "loginPage":"/login",
+            "client_id":"1914729668211931",
+            "client_secret":"URbS5MBfU5SYX8EXUQDM7xQZaKcuYR77"
+        },
+        "mail": {
+            "service": "gmail",
+            "from":"services@example.com",
+            "auth": {
+                "user": "services@example.com",
+                "pass": "pass"
+            }
+        }
+    },
+    "adapterTypes": [
+        { "name":"SQLite Data Adapter", "invariantName": "sqlite", "type":"@themost/sqlite" },
+        { "name":"MySQL Data Adapter", "invariantName": "mysql", "type":"@themost/mysql" }
+    ],
+    "adapters": [
+        {
+            "name": "local-db", "invariantName": "sqlite", "default": true,
+            "options": {
+                "database": "./db/local.db"
+            }
+        }
+    ],
+    "mimes": [
+        { "extension": ".css", "type": "text/css" },
+        { "extension": ".js", "type": "application/javascript" },
+        { "extension": ".json", "type": "application/json", "encoding": "utf-8" },
+        { "extension": ".xml", "type": "text/xml" },
+        { "extension": ".rdf", "type": "text/xml" },
+        { "extension": ".xsd", "type": "text/xml" },
+        { "extension": ".less", "type": "text/css" },
+        { "extension": ".png", "type": "image/png" },
+        { "extension": ".ico", "type": "image/x-icon"},
+        { "extension": ".gif", "type": "image/gif"},
+        { "extension": ".bmp", "type": "image/bmp"},
+        { "extension": ".jpg", "type": "image/jpeg" },
+        { "extension": ".jpeg", "type": "image/jpeg"},
+        { "extension": ".html", "type": "text/html" },
+        { "extension": ".htm", "type": "text/html" },
+        { "extension": ".pdf", "type": "application/pdf" },
+        { "extension": ".txt", "type": "text/plain"},
+        { "extension": ".svg", "type": "image/svg+xml"},
+        { "extension": ".woff", "type": "application/x-font-woff"},
+        { "extension": ".woff2", "type": "application/x-font-woff"},
+        { "extension": ".ttf", "type": "application/octet-stream" },
+        { "extension": ".map", "type": "application/json" },
+        { "extension": ".csv","type": "application/csv" }
+    ]
+}

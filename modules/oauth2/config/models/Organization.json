@@ -1,0 +1,205 @@
+{
+    "id": 4423896,
+    "@id": "http://schema.org/Organization",
+    "name": "Organization",
+    "title": "Organization",
+    "description": "An organization such as a school, NGO, corporation, club, etc.",
+    "hidden": false,
+    "sealed": false,
+    "inherits": "Party",
+    "version": "1.1",
+    "fields": [
+        {
+            "name": "id",
+            "title": "ID",
+            "description": "The identifier of the item.",
+            "type": "Integer",
+            "nullable": false,
+            "primary": true
+        },
+        {
+            "@id": "http://schema.org/additionalType",
+            "name": "additionalType",
+            "title": "Additional Type",
+            "description": "An additional type for the item, typically used for adding more specific types from external vocabularies in microdata syntax. This is a relationship between something and a class that the thing is in. In RDFa syntax, it is better to use the native RDFa syntax - the 'typeof' attribute - for multiple types. Schema.org tools may have only weaker understanding of extra types, in particular those defined externally.",
+            "type": "Text",
+            "readonly": true,
+            "value":"javascript:return this.model.name;"
+        },
+        {
+            "@id": "http://schema.org/name",
+            "name": "name",
+            "title": "Name",
+            "description": "The name of the item.",
+            "type": "Text",
+            "nullable":false
+        },
+        {
+            "@id": "http://schema.org/serviceArea",
+            "name": "serviceArea",
+            "title": "Service Area",
+            "description": "The geographic area where the service is provided.",
+            "type": "AdministrativeArea"
+        },
+        {
+            "@id": "http://schema.org/subOrganization",
+            "name": "subOrganization",
+            "title": "Sub Organization",
+            "description": "A relationship between two organizations where the first includes the second, e.g., as a subsidiary. See also: the more specific 'department' property.",
+            "type": "Organization"
+        },
+        {
+            "@id": "http://schema.org/members",
+            "name": "members",
+            "title": "Members",
+            "description": "A member of this organization.",
+            "type": "Person",
+            "many": true
+        },
+        {
+            "@id": "http://schema.org/aggregateRating",
+            "name": "aggregateRating",
+            "title": "Aggregate Rating",
+            "description": "The overall rating, based on a collection of reviews or ratings, of the item.",
+            "type": "AggregateRating",
+            "nested":true
+        },
+        {
+            "@id": "http://schema.org/reviews",
+            "name": "reviews",
+            "title": "Reviews",
+            "description": "Review of the item.",
+            "many": true,
+            "type": "Review"
+        },
+        {
+            "@id": "http://schema.org/awards",
+            "name": "awards",
+            "title": "Awards",
+            "description": "Awards won by or for this item.",
+            "type": "Award",
+            "many":true,
+            "mapping": {
+                "cascade": "delete",
+                "assocationType": "association",
+                "parentModel":"Person",
+                "parentField": "id",
+                "childModel": "Award",
+                "childField": "object"
+            }
+        },
+        {
+            "@id": "http://schema.org/foundingDate",
+            "name": "foundingDate",
+            "title": "Founding Date",
+            "description": "The date that this organization was founded.",
+            "type": "Date"
+        },
+        {
+            "@id": "http://schema.org/founders",
+            "name": "founders",
+            "title": "Founders",
+            "description": "A person who founded this organization.",
+            "many": true,
+            "type": "Person"
+        },
+        {
+            "@id": "http://schema.org/dissolutionDate",
+            "name": "dissolutionDate",
+            "title": "Dissolution Date",
+            "description": "The date that this organization was dissolved.",
+            "type": "Date"
+        },
+        {
+            "@id": "http://schema.org/events",
+            "name": "events",
+            "title": "Events",
+            "description": "Upcoming or past events associated with this place or organization.",
+            "type": "Event",
+            "many": true
+        },
+        {
+            "@id": "http://schema.org/logo",
+            "name": "logo",
+            "title": "Logo",
+            "description": "An associated logo.",
+            "type": "ImageObject"
+        },
+        {
+            "@id": "http://schema.org/employees",
+            "name": "employees",
+            "title": "Employees",
+            "description": "People working for this organization.",
+            "type": "Person",
+            "many": true
+        },
+        {
+            "@id": "http://schema.org/department",
+            "name": "department",
+            "title": "Department",
+            "description": "A relationship between an organization and a department of that organization, also described as an organization (allowing different urls, logos, opening hours). For example: a store with a pharmacy, or a bakery with a cafe.",
+            "type": "Organization"
+        },
+        {
+            "@id": "http://schema.org/parentOrganization",
+            "name": "parentOrganization",
+            "title": "Parent Organization",
+            "description": "The larger organization that this local business is a branch of, if any.",
+            "type": "Organization"
+        },
+        {
+            "@id": "http://schema.org/legalName",
+            "name": "legalName",
+            "title": "Legal Name",
+            "description": "The official name of the organization, e.g. the registered company name.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/foundingLocation",
+            "name": "foundingLocation",
+            "title": "Founding Location",
+            "description": "The place where the Organization was founded.",
+            "type": "Place"
+        },
+        {
+            "@id": "http://schema.org/owns",
+            "name": "owns",
+            "title": "Owns",
+            "description": "Products owned by the organization or person.",
+            "many": true,
+            "type": "Product"
+        },
+        {
+            "@id": "http://schema.org/founder",
+            "name": "founder",
+            "title": "Founder",
+            "description": "A person who founded this organization.",
+            "type": "Person"
+        },
+        {
+            "@id": "http://schema.org/location",
+            "name": "location",
+            "title": "Location",
+            "description": "The location of for example where the event is happening, an organization is located, or where an action takes place.",
+            "type": "Place"
+        },
+        {
+            "@id": "http://schema.org/areaServed",
+            "name": "areaServed",
+            "title": "Area Served",
+            "description": "The geographic area where a service or offered item is provided.",
+            "type": "GeoShape"
+        }
+    ],
+    "privileges": [
+        {
+            "mask": 15,
+            "type": "global"
+        },
+        {
+            "mask": 15,
+            "type": "global",
+            "account": "Administrators"
+        }
+    ]
+}

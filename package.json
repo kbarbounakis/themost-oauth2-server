@@ -1,19 +1,24 @@
 {
-  "name": "themost-oauth2-server",
+  "name": "themost-oauth2-server-src",
   "version": "0.1.1",
-  "description": "OAuth2 server based on @themost/data ORM module",
-  "main": "dist/server/server.js",
+  "description": "OAuth2 server based on MOST Web Framework",
   "repository": "",
   "private": true,
   "author": "",
   "scripts": {
-    "start": "node ./bin/www",
-    "build": "gulp build",
-    "lint": "gulp lint",
-    "serve": "gulp serve"
+    "build": "babel ./modules/oauth2 --out-dir dist/modules/oauth2 --copy-files --ignore ./modules/oauth2/node_modules"
   },
-  "devDependencies": {
-    "@themost/cli": "^2.1.8",
+  "dependencies": {
+    "@themost/cli": "^2.1.9",
+    "@themost/client": "^2.2.1",
+    "@themost/node": "^2.2.1",
+    "@themost/query": "^2.3.1",
+    "@themost/xml": "^2.3.1",
+    "@themost/common": "^2.1.5",
+    "@themost/data": "^2.2.1",
+    "@themost/mailer": "^2.1.1",
+    "@themost/sqlite": "^2.1.2",
+    "@themost/web": "^2.2.1",
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
@@ -34,27 +39,6 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^8.0.0",
     "gulp-eslint": "^5.0.0"
-  },
-  "dependencies": {
-    "@themost/common": "^2.1.1",
-    "@themost/express": "^1.1.0",
-    "@themost/mailer": "^2.1.1",
-    "@themost/sqlite": "^2.1.2",
-    "cookie-parser": "~1.4.3",
-    "cors": "^2.8.5",
-    "debug": "~2.6.9",
-    "ejs": "~2.5.7",
-    "ejs-locals": "^1.0.2",
-    "express": "~4.16.0",
-    "http-errors": "~1.6.2",
-    "i18n": "^0.8.3",
-    "lodash": "^4.17.11",
-    "moment": "^2.22.2",
-    "morgan": "~1.9.0",
-    "node-sass-middleware": "0.11.0",
-    "passport": "^0.4.0",
-    "passport-http": "^0.3.0",
-    "passport-local": "^1.0.0"
   },
   "eslintConfig": {
     "parser": "babel-eslint",

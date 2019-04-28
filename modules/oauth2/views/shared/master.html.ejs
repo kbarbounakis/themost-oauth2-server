@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="<%=html.context.culture().substr(0,2)%>">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="SIS Authentication Services">
+    <meta name="author" content="">
+    <meta name="keyword" content="SIS Authentication Services">
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <title>
+        <%= html.context.getApplication().getConfiguration().getSourceAt('settings/app/title') %>
+    </title>
+    <!-- Icons -->
+    <link href="/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/node_modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+
+    <!-- Main styles for this application -->
+    <link href="/assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body ng-app="app" class="oval app">
+<nav class="navbar fixed-top navbar-expand-sm">
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav ml-auto">
+            <%
+            let contextCulture = html.context.culture();
+            html.context.getApplication().getConfiguration().getSourceAt('settings/localization/cultures').filter(culture => {
+                return culture !== contextCulture;
+            }).map(culture => {
+                return culture.substr(0,2)
+            }).forEach( culture => {
+                %>
+                <li class="nav-item">
+                    <a class="nav-link" href="/?lang=<%=culture%>"><%=culture%></a>
+                </li>
+            <%
+            }) %>
+
+        </ul>
+    </div>
+</nav>
+<main class="container-fluid">
+    <div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mt-7">
+                    <%- body %>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-xl-block d-lg-block">
+                <div class="row justify-content-center mt-7 text-white">
+                    <div class="col-8 col-sm-6">
+                        <div class="doc-block">
+                            <div ng-include="'/welcome'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer class="footer">
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-sm">
+            <a class="navbar-brand" href="#">IT CENTER - STUDENT INFORMATION SYSTEM</a>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase" href="#" title="<%=html.context.translate('Available soon')%>"><%=html.context.translate('Support')%></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase" href="#" title="<%=html.context.translate('Available soon')%>"><%=html.context.translate('Statistics')%></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</footer>
+
+
+<!-- Bootstrap and necessary plugins -->
+<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="/node_modules/popper.js/dist/umd/popper.min.js"></script>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/node_modules/angular/angular.min.js"></script>
+<script src="/node_modules/angular-messages/angular-messages.min.js"></script>
+<script src="/assets/js/app.js"></script>
+</body>
+</html>

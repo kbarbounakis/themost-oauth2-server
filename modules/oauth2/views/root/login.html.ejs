@@ -1,0 +1,40 @@
+<%# { "layout":"./../shared/master.html.ejs", "title":"Login" } %>
+<div class="row justify-content-center" ng-controller="LoginController as login">
+    <div class="col-md-9">
+        <div class="card-group">
+            <div class="card border-0">
+                <div class="card-body" <%- model.username ? "ng-init=\"username='" + model.username  + "';\"" : "" %>>
+                    <form class="form" name="form" method="post" action="" novalidate="novalidate">
+                        <h1 class="text-primary text-center card-title"><span>Student</span> Information System</h1>
+                        <input type="hidden" server-anti-forgery="">
+                        <div class="text-center mb-5 mt-5">
+                            <img src="assets/img/user_icon.svg" alt="User icon">
+                        </div>
+                        <div class="mb-4">
+                            <label class="text-uppercase" for="username"><%=html.context.translate('UsernameLabel')%></label>
+                            <input autocomplete="no" type="text" ng-model="username" required="required" class="form-control" placeholder="<%=html.context.translate('Username')%>" id="username" name="credentials[username]">
+                        </div>
+                        <div class="mb-4">
+                            <label class="text-uppercase" for="password" ><%=html.context.translate('PasswordLabel')%></label>
+                            <input autocomplete="no" ng-model="password" required="required" type="password" class="form-control" placeholder="<%=html.context.translate('Password')%>" id="password" name="credentials[password]">
+                        </div>
+                        <% if (model.code === 'ECREDS' || model.code === 'EREQ') { %>
+                        <div class="col-sm-12 justify-content-center">
+                            <p class="pb-4 text-danger"><%= html.context.translate(model.message || 'An error occurred while validating your credentials.')%></p>
+                        </div>
+                        <%
+                        } else if (typeof model.message !== 'undefined') {
+                        %>
+                        <div class="col-sm-12 justify-content-center">
+                            <p class="pt-4 text-danger"><%=html.context.translate('An error occurred while validating your credentials. Please try again or contact to system administrator.')%></p>
+                        </div>
+                        <% }  %>
+                        <div class="text-center pt-4">
+                            <button type="submit" class="btn btn-success px-4 text-uppercase" ng-disabled="form.$invalid"><%=html.context.translate('Login')%></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

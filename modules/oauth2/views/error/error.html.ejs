@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="SIS Authentication Services">
+    <meta name="author" content="">
+    <meta name="keyword" content="SIS Authentication Services">
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    <title>
+        <%=html.context.getApplication().getConfiguration().getSourceAt('settings/app/title')%>
+    </title>
+    <!-- Icons -->
+    <link href="/node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/node_modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <!-- Main styles for this application -->
+    <link href="/assets/css/style.css" rel="stylesheet">
+</head>
+
+<body ng-app="app" class="app flex-row align-items-center oval">
+<main class="container-fluid">
+    <div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mt-7">
+                    <div class="row justify-content-center">
+                        <div class="col-md-9">
+                            <div class="card-group">
+                                <div class="card border-0">
+                                    <div class="card-body">
+                                        <h1 class="card-title text-center"><%=html.context.translate('GeneralErrorTitle')%></h1>
+                                        <div class="text-center mb-4 mt-4">
+                                            <img width="126px" src="assets/img/error_icon.svg" alt="User icon">
+                                        </div>
+                                        <p class="text-center text-danger">
+                                            <span><%=html.context.translate('GeneralErrorMessage')%></span>
+                                        </p>
+                                        <p class="text-center pb-4">
+                                            <span><%=html.context.translate('GeneralErrorRetry')%></span>
+                                        </p>
+                                        <div class="text-center">
+                                            <a href="/" class="btn btn-primary"><%=html.context.translate('HomeLabel')%></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-xl-block d-lg-block">
+                <div class="row justify-content-center mt-7 text-white">
+                    <div class="col-8 col-sm-6">
+                        <div class="doc-block">
+                            <div ng-include="'/welcome'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer class="footer">
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-sm">
+            <a class="navbar-brand" href="#">IT CENTER - STUDENT INFORMATION SYSTEM</a>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase" href="#" title="<%=html.context.translate('Available soon')%>"><%=html.context.translate('Support')%></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase" href="#" title="<%=html.context.translate('Available soon')%>"><%=html.context.translate('Statistics')%></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</footer>
+</body>
+
+<!-- Bootstrap and necessary plugins -->
+<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="/node_modules/popper.js/dist/umd/popper.min.js"></script>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/node_modules/angular/angular.min.js"></script>
+<script src="/node_modules/angular-messages/angular-messages.min.js"></script>
+<script src="/assets/js/app.js"></script>
+</body>
+</html>

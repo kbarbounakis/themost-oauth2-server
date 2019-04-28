@@ -1,0 +1,11 @@
+// Override Bootstrap variables
+@import "bootstrap-variables";
+
+// Import Bootstrap source files
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+
+//Import document styles
+@import "./docs";
+
+//Import custom styles
+@import "./custom";

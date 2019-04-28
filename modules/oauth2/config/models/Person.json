@@ -1,0 +1,252 @@
+{
+    "id": 2231606,
+    "@id": "http://schema.org/Person",
+    "name": "Person",
+    "title": "Person",
+    "description": "A person (alive, dead, undead, or fictional).",
+    "hidden": false,
+    "sealed": false,
+    "inherits": "Party",
+    "fields": [
+        {
+            "name": "id",
+            "title": "ID",
+            "description": "The identifier of the item.",
+            "type": "Integer",
+            "nullable": false,
+            "primary": true
+        },
+        {
+            "@id": "http://schema.org/spouse",
+            "name": "spouse",
+            "title": "Spouse",
+            "description": "The person's spouse.",
+            "type": "Person"
+        },
+        {
+            "@id": "http://schema.org/colleagues",
+            "name": "colleagues",
+            "title": "Colleagues",
+            "description": "A colleague of the person.",
+            "many": true,
+            "type": "Person"
+        },
+        {
+            "@id": "http://schema.org/height",
+            "name": "height",
+            "title": "Height",
+            "description": "The height of the item.",
+            "type": "QuantitativeValue"
+        },
+        {
+            "@id": "http://schema.org/workLocation",
+            "name": "workLocation",
+            "title": "Work Location",
+            "description": "A contact location for a person's place of work.",
+            "type": "Place"
+        },
+        {
+            "@id": "http://schema.org/children",
+            "name": "children",
+            "title": "Children",
+            "description": "A child of the person.",
+            "many":true,
+            "type": "Person"
+        },
+        {
+            "@id": "http://schema.org/jobTitle",
+            "name": "jobTitle",
+            "title": "Job Title",
+            "description": "The job title of the person (for example, Financial Manager).",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/birthPlace",
+            "name": "birthPlace",
+            "title": "Birth Place",
+            "description": "The place where the person was born.",
+            "type": "Place"
+        },
+        {
+            "@id": "http://schema.org/gender",
+            "name": "gender",
+            "title": "Gender",
+            "description": "Gender of the person. While http://schema.org/Male and http://schema.org/Female may be used, text strings are also acceptable for people who do not identify as a binary gender.",
+            "type": "GenderType"
+        },
+        {
+            "@id": "http://schema.org/parents",
+            "name": "parents",
+            "title": "Parents",
+            "description": "A parents of the person.",
+            "many": true,
+            "type": "Person"
+        },
+        {
+            "@id": "http://schema.org/alumniOf",
+            "name": "alumniOf",
+            "title": "Alumni Of",
+            "description": "An organization that the person is an alumni of.",
+            "many": true,
+            "type": "EducationalOrganization"
+        },
+        {
+            "@id": "http://schema.org/homeLocation",
+            "name": "homeLocation",
+            "title": "Home Location",
+            "description": "A contact location for a person's residence.",
+            "type": "ContactPoint"
+        },
+        {
+            "@id": "http://schema.org/birthDate",
+            "name": "birthDate",
+            "title": "Birth Date",
+            "description": "Date of birth.",
+            "type": "Date"
+        },
+        {
+            "@id": "http://schema.org/givenName",
+            "name": "givenName",
+            "title": "Given Name",
+            "description": "Given name. In the U.S., the first name of a Person. This can be used along with familyName instead of the name property.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/awards",
+            "name": "awards",
+            "title": "Awards",
+            "description": "Awards won by or for this item.",
+            "type": "Award",
+            "many":true,
+            "mapping": {
+                "cascade": "delete",
+                "assocationType": "association",
+                "parentModel":"Person",
+                "parentField": "id",
+                "childModel": "Award",
+                "childField": "object"
+            }
+        },
+        {
+            "@id": "http://schema.org/familyName",
+            "name": "familyName",
+            "title": "Family Name",
+            "description": "Family name. In the U.S., the last name of an Person. This can be used along with givenName instead of the name property.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/honorificPrefix",
+            "name": "honorificPrefix",
+            "title": "Honorific Prefix",
+            "description": "An honorific prefix preceding a Person's name such as Dr/Mrs/Mr.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/additionalName",
+            "name": "additionalName",
+            "title": "Additional Name",
+            "description": "An additional name for a Person, can be used for a middle name.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/siblings",
+            "name": "siblings",
+            "title": "Siblings",
+            "description": "A sibling of the person.",
+            "many": true,
+            "type": "Person"
+        },
+        {
+            "@id": "http://schema.org/weight",
+            "name": "weight",
+            "title": "Weight",
+            "description": "The weight of the product or person.",
+            "type": "QuantitativeValue"
+        },
+        {
+            "@id": "http://schema.org/affiliation",
+            "name": "affiliation",
+            "title": "Affiliation",
+            "description": "An organization that this person is affiliated with. For example, a school/university, a club, or a team.",
+            "type": "Organization"
+        },
+        {
+            "@id": "http://schema.org/honorificSuffix",
+            "name": "honorificSuffix",
+            "title": "Honorific Suffix",
+            "description": "An honorific suffix preceding a Person's name such as M.D. /PhD/MSCSW.",
+            "type": "Text"
+        },
+        {
+            "@id": "http://schema.org/nationality",
+            "name": "nationality",
+            "title": "Nationality",
+            "description": "Nationality of the person.",
+            "type": "Country",
+            "mapping": {
+                "associationType": "association",
+                "parentModel": "Country",
+                "parentField": "cca2",
+                "childModel": "Person",
+                "childField": "nationality"
+            }
+        },
+        {
+            "@id": "http://schema.org/relatedTo",
+            "name": "relatedTo",
+            "title": "Related To",
+            "description": "The most generic familial relation.",
+            "type": "Person"
+        },
+        {
+            "@id": "http://schema.org/follows",
+            "name": "follows",
+            "title": "Follows",
+            "description": "The most generic uni-directional social relation.",
+            "many": true,
+            "type": "Person"
+        },
+        {
+            "@id": "http://schema.org/knows",
+            "name": "knows",
+            "title": "Knows",
+            "description": "The most generic bi-directional social/work relation.",
+            "many": true,
+            "type": "Person"
+        },
+        {
+            "@id": "http://schema.org/knows",
+            "name": "knows",
+            "title": "Knows",
+            "description": "The most generic bi-directional social/work relation.",
+            "many": true,
+            "type": "Person"
+        },
+        {
+            "@id": "https://themost.io/skills",
+            "name": "skills",
+            "title": "Skills",
+            "description": "A collection of skills of the person.",
+            "many": true,
+            "type": "Text"
+        },
+        {
+            "@id": "https://themost.io/user",
+            "name": "user",
+            "title": "User",
+            "description": "The user associated with this person.",
+            "type": "User"
+        }
+    ],
+    "privileges": [
+        {
+            "mask": 15,
+            "type": "global"
+        },
+        {
+            "mask": 15,
+            "type": "global",
+            "account": "Administrators"
+        }
+    ]
+}

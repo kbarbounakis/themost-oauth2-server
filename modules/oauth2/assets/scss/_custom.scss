@@ -1,0 +1,156 @@
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 104px;
+}
+
+.mt-7 {
+  margin-top: 7em !important;
+}
+
+
+.mt-9 {
+  margin-top: 9em !important;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 104px;
+  line-height: 104px;
+  .navbar {
+    position: relative;
+    bottom: 0;
+  }
+}
+
+.navbar {
+  padding: 2rem 1.5rem;
+  .navbar-brand {
+    color: #73818E;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.17px;
+    line-height: 24px;
+  }
+}
+
+.navbar-expand-sm {
+  .navbar-nav {
+    .nav-link {
+      color: #FFFFFF;
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 0.17px;
+      line-height: 24px;
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  body.oval {
+    background: url("../img/bg01.svg");
+    background-repeat: no-repeat;
+    background-position: calc(50% + 1200px) center;
+  }
+}
+
+.card-body {
+  padding-top: 0;
+}
+
+h1.card-title, h2.card-title {
+  color: map-get($colors, 'purple') !important;
+  font-size: 40px;
+  font-weight: 300;
+  letter-spacing: 0.38px;
+  line-height: 53px;
+  span {
+    font-weight: 400;
+  }
+}
+
+a.btn-success {
+  height: 75px;
+  width: 264px;
+  color: #FFFFFF;
+  box-sizing: border-box;
+  border: 1px solid $success;
+  border-radius: 3px;
+  box-shadow: 0 0 17px 0 rgba(177,177,177,0.5);
+  font-size: 22px;
+  font-weight: normal;
+  letter-spacing: 0.52px;
+  line-height: 60px;
+  text-align: center;
+  text-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+}
+
+.btn-primary {
+  height: 75px;
+  width: 264px;
+  box-sizing: border-box;
+  border: 1px solid #664bff;
+  border-radius: 3px;
+  box-shadow: 0 0 17px 0 rgba(177,177,177,0.5);
+  font-size: 22px;
+  font-weight: normal;
+  letter-spacing: 0.52px;
+  line-height: 60px;
+  text-align: center;
+  text-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+}
+
+.btn-primary {
+  background-color: #664bff !important;
+}
+
+form {
+  input.form-control {
+    padding: 13px 25px 21px;
+    border-radius: 6px;
+    box-shadow: 0 0 17px 0 rgba(177,177,177,0.5);
+    &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      color: $gray-500;
+      font-weight: lighter;
+      opacity: 1; /* Firefox */
+    }
+    &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+      font-weight: lighter;
+      color: $gray-500;
+    }
+    &::-ms-input-placeholder { /* Microsoft Edge */
+      font-weight: lighter;
+      color: $gray-500;
+    }
+  }
+  label {
+    font-size: 14px;
+    letter-spacing: 1.23px;
+    line-height: 19px;
+    color: map-get($colors, 'purple');
+  }
+
+  .btn {
+    height: 75px;
+    width: 264px;
+    box-sizing: border-box;
+    border: 1px solid #4DBD74;
+    border-radius: 3px;
+    box-shadow: 0 0 17px 0 rgba(177,177,177,0.5);
+    font-size: 22px;
+    font-weight: normal;
+    letter-spacing: 0.52px;
+    line-height: 30px;
+    text-align: center;
+    text-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+  }
+
+}
+

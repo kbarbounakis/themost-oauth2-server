@@ -1,0 +1,19 @@
+<%# { "layout":"./../shared/master.html.ejs", "title":"Login" } %>
+<div class="row justify-content-center">
+    <div class="col-md-9">
+        <div class="card-group">
+            <div class="card border-0">
+                <div class="card-body" <%- model.username ? "ng-init=\"username='" + model.username  + "';\"" : "" %>>
+                        <h1 class="text-primary text-center card-title"><span>Student</span> Information System</h1>
+                        <div class="text-center mb-5 mt-5">
+                            <img src="assets/img/user_icon.svg" alt="User icon">
+                        </div>
+                        <div class="text-center pt-4">
+                            <p class="text-info"><%=html.context.translate('LoginUsingAcademicAccount')%></p>
+                            <a class="btn btn-success text-uppercase" href="<%=html.context.getApplication().resolveUrl('~/login')%>"><%=html.context.translate('Login')%></a>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
